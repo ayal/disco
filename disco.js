@@ -85,14 +85,14 @@ var play = function () {
 	}, 10);
 };
 
-for (var h = 0; h < 3; h++) {
-    for (var j = 0; j < 10; j++) {
+for (var h = 0; h < 2; h++) {
+    for (var j = 0; j < 5; j++) {
 	for (var i = 0; i < 14; i++) {
 	    if (i === 1) {
-		playfreq(150 + i * 50, 400 + j * 5);   
+		playfreq(200 + i * 50, 300 + j * 5);   
 	    }
 	    else {
-		playfreq(150 + i * 50, 100 + j * 5);   
+		playfreq(200 + i * 50, 100 + j * 5);   
 	    }
 	}
     }
