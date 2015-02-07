@@ -50,7 +50,7 @@ var play = function () {
 for (var j = 0; j < 13; j++) {
     for (var i = 0; i < 13; i++) {
 	if (i === 1) {
-	    playfreq(500 + i * 50, 100);   
+	    playfreq(100 + i * 50, 500);   
 	}
 	else {
 	    playfreq(100 + i * 50, 100);   
