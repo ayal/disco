@@ -27,12 +27,12 @@ var play = function (interval) {
     setInterval(function(){
 	    if (new Date - lasttime >= interval) {
 		if (queue.length) {
+		    vca.gain.value = 0;
 		    vco.frequency.value = queue[0];	
 		    vca.gain.value = 1;
 		    queue = queue.splice(1);
 		    lasttime = new Date();
 		}	 
-		vca.gain.value = 0;
 	    }   
 	}, 10);
 };
