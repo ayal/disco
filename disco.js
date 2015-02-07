@@ -43,5 +43,5 @@ playfreq(100);
 playfreq(200);
 playfreq(300);
 
-play(500);
+play(5000);
 
