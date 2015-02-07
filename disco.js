@@ -21,9 +21,9 @@ var playfreq = function(f) {
     queue.push(f);
 };
 
-lasttime = new Date;
 
 var play = function (interval) {
+    lasttime = window.lasttime || new Date; 
     setInterval(function(){
 	    if (new Date - lasttime >= interval - 50) {
 		vca.gain.value = 0;
@@ -40,10 +40,10 @@ var play = function (interval) {
 	}, 10);
 };
 
-
-for (var i = 0; i < 13; i++) {
-    playfreq(100 + i * 50);   
+for (var j = 0; j < 13; j++) {
+    for (var i = 0; i < 13; i++) {
+	playfreq(100 + i * 50);   
+    }
+    play(100);
 }
-
-play(100);
 
