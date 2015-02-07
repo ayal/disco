@@ -25,7 +25,7 @@ lasttime = new Date;
 
 var play = function (interval) {
     setInterval(function(){
-	    if (new Date - lastime >= interval) {
+	    if (new Date - lasttime >= interval) {
 		if (queue.length) {
 		    vco.frequency.value = queue[0];	
 		    vca.gain.value = 1;
