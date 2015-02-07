@@ -6,6 +6,57 @@
 <body style="">
 <script src="disco.js"></script>
 <pre style="font-size:20px">
+var context = new AudioContext();
+var vco = context.createOscillator();
+
+var Voice = (function(context) {
+	function Voice(frequency){
+	    this.frequency = frequency;
+	    this.vco = context.createOscillator();
+	    this.vca = context.createGain();
+
+	};
+
+	Voice.prototype.stop = function() {
+	    if (this.vco) {
+		try {
+		    var that = this;
+		    this.vca.gain.value = 0;
+		    setTimeout(function(){
+			    that.vco && that.vco.stop();
+			    that.vco = null;
+			},100);
+		}
+		catch(e) {
+		}
+	    }
+	}
+
+
+	Voice.prototype.start = function() {
+	    var rgbav = 'rgba(' + this.frequency / 2.5 + ',0,' + this.frequency / 2.5 + ',' + 1 + ')';
+	    $('body').css('background-color', rgbav)
+
+	    /* VCO */
+	    this.vco.type = vco.SINE;
+	    this.vco.frequency.value = this.frequency;
+
+	    this.vca.gain.value = 1;
+
+	    /* connections */
+	    this.vco.connect(this.vca);
+	    this.vca.connect(context.destination);
+	    
+	    try {
+		this.vco.start(0);
+	    }
+	    catch (ex) {
+	    }
+	};
+
+	return Voice;
+    })(context);
+
 
 queue = [];
 
@@ -51,8 +102,10 @@ for (var h = 0; h < 3; h++) {
 		playfreq(100 + i * 50, 100 + j * 5);   
 	    }
 	}
-	play();
     }
-}</pre>
+}
+
+play();
+</pre>
  
 </body>

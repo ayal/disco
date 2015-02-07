@@ -94,6 +94,7 @@ for (var h = 0; h < 3; h++) {
 		playfreq(100 + i * 50, 100 + j * 5);   
 	    }
 	}
-	play();
     }
 }
+
+	play();
