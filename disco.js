@@ -48,7 +48,7 @@ var play = function () {
 };
 
 for (var j = 0; j < 13; j++) {
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 14; i++) {
 	if (i === 1) {
 	    playfreq(50 + i * 50, 500);   
 	}
