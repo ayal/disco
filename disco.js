@@ -1,24 +1,61 @@
 var context = new AudioContext();
-
-/* VCO */
 var vco = context.createOscillator();
-vco.type = vco.SINE;
-vco.frequency.value = this.frequency;
-vco.start(0);
 
-/* VCA */
-var vca = context.createGain();
-vca.gain.value = 0;
+var Voice = (function(context) {
+	function Voice(frequency){
+	    this.frequency = frequency;
+	    this.vco = context.createOscillator();
+	    this.vca = context.createGain();
 
-/* Connections */
-vco.connect(vca);
-vca.connect(context.destination);
+	};
+
+	Voice.prototype.stop = function() {
+	    if (this.vco) {
+		try {
+		    var that = this;
+		    this.vca.gain.value = 0;
+		    setTimeout(function(){
+			    that.vco && that.vco.stop();
+			    that.vco = null;
+			},100);
+		}
+		catch(e) {
+		}
+	    }
+	}
+
+
+	Voice.prototype.start = function() {
+	    var rgbav = 'rgba(' + this.frequency / 2.5 + ',0,' + this.frequency / 2.5 + ',' + 1 + ')';
+	    $('body').css('background-color', rgbav)
+
+	    /* VCO */
+	    this.vco.type = vco.SINE;
+	    this.vco.frequency.value = this.frequency;
+
+	    this.vca.gain.value = 1;
+
+	    /* connections */
+	    this.vco.connect(this.vca);
+	    this.vca.connect(context.destination);
+	    
+	    try {
+		this.vco.start(0);
+	    }
+	    catch (ex) {
+	    }
+	};
+
+	return Voice;
+    })(context);
+
 
 queue = [];
 
 
 var playfreq = function(f,i) {
-    queue.push({frequency:f, interval:i});
+    var voice = new Voice(f);
+    queue.push({interval:i, voice: voice});
 };
 
 
@@ -27,35 +64,36 @@ var play = function () {
     setInterval(function(){
 	    if (queue.length) {
 		var interval = queue[0].interval;
-		var frequency = queue[0].frequency;
+		var voice = queue[0].voice;
+
 		if (new Date - lasttime >= interval - 50) {
-		    vca.gain.value = 0;
+		    window.lastvoice && lastvoice.stop();
 		}
 
 		if (new Date - lasttime >= interval) {
-		    vca.gain.value = 0;
+		    voice.start();
 
-		    vco.frequency.value = frequency;	
-		    vca.gain.value = 1;
 		    queue = queue.splice(1);
 		    lasttime = new Date();
+		    lastvoice = voice;
 		}
 	    }
 	    else {
-		vca.gain.value = 0;
+		lastvoice.stop();
 	    }
 	}, 10);
 };
 
-for (var j = 0; j < 13; j++) {
-    for (var i = 0; i < 14; i++) {
-	if (i === 1) {
-	    playfreq(50 + i * 50, 500);   
+for (var h = 0; h < 3; h++) {
+    for (var j = 0; j < 10; j++) {
+	for (var i = 0; i < 13; i++) {
+	    if (i === 1) {
+		playfreq(100 + i * 50, 500 + j * 5);   
+	    }
+	    else {
+		playfreq(100 + i * 50, 100 + j * 5);   
+	    }
 	}
-	else {
-	    playfreq(50 + i * 50, 100);   
-	}
+	play();
     }
-    play();
 }
-
