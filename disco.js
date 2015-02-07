@@ -87,9 +87,9 @@ var play = function () {
 
 for (var h = 0; h < 2; h++) {
     for (var j = 0; j < 5; j++) {
-	for (var i = 0; i < 14; i++) {
+	for (var i = 0; i < 13; i++) {
 	    if (i === 1) {
-		playfreq(200 + i * 50, 300 + j * 5);   
+		playfreq(200 + i * 50, 200 + j * 5);   
 	    }
 	    else {
 		playfreq(200 + i * 50, 100 + j * 5);   
