@@ -80,6 +80,7 @@ var play = function () {
 	    }
 	    else {
 		lastvoice.stop();
+		location.href = 'https://www.youtube.com/watch?v=VDxrIJXFjIU'
 	    }
 	}, 10);
 };
