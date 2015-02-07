@@ -45,5 +45,5 @@ for (var i = 0; i < 13; i++) {
     playfreq(100 + i * 50);   
 }
 
-play(200);
+play(100);
 
