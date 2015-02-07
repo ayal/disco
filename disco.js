@@ -88,10 +88,10 @@ for (var h = 0; h < 3; h++) {
     for (var j = 0; j < 10; j++) {
 	for (var i = 0; i < 14; i++) {
 	    if (i === 1) {
-		playfreq(100 + i * 50, 500 + j * 5);   
+		playfreq(150 + i * 50, 400 + j * 5);   
 	    }
 	    else {
-		playfreq(100 + i * 50, 100 + j * 5);   
+		playfreq(150 + i * 50, 100 + j * 5);   
 	    }
 	}
     }
