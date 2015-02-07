@@ -38,10 +38,9 @@ var play = function (interval) {
 };
 
 
+for (var i = 0; i < 13; i++) {
+    playfreq(100 + i * 20);   
+}
 
-playfreq(100);
-playfreq(200);
-playfreq(300);
-
-play(5000);
+play(500);
 
