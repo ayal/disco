@@ -81,7 +81,7 @@ var play = function () {
 	    else {
 	    	window.clearInterval(window.playinterval);
 		lastvoice.stop();
-		location.href = 'https://www.youtube.com/watch?v=VDxrIJXFjIU'
+		location.href = 'https://www.youtube.com/watch?v=VDxrIJXFjIU#t=3'
 	    }
 	}, 10);
 };
