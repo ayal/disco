@@ -67,7 +67,8 @@ var playinst = function(inst,i,q) {
 
 var play = function (q) {
     lasttime = window.lasttime || new Date; 
-    window.playinterval = setInterval(function(){
+    var playinterval = {};
+    playinterval['handle'] = setInterval(function(){
 	    if (q.length) {
 		var interval = q[0].interval;
 		var voice = q[0].voice || q[0].inst;
@@ -86,7 +87,7 @@ var play = function (q) {
 		}
 	    }
 	    else {
-	    	window.clearInterval(window.playinterval);
+	    	window.clearInterval(playinterval['handle']);
 		lastvoice.stop();
 		location.href = 'https://www.youtube.com/watch?v=VDxrIJXFjIU#t=3'
 	    }
