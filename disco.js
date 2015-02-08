@@ -90,7 +90,7 @@ for (var h = 0; h <1; h++) {
     for (var j = 0; j < 5; j++) {
 	for (var i = 0; i < 16; i++) {
 	    
-	playfreq(150 + i * 50, 150 + j * 1);   
+	playfreq(150 + i * 50, 120 + j * 1);   
 	    
 	}
     }
