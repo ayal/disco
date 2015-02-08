@@ -6,7 +6,7 @@
 <body style="">
 
 <script src="bufferloader.js"></script>
-<script src="disco.js?v=1"></script>
+<script src="disco.js?v=3"></script>
 
 <pre style="font-size:20px">
     var startTime = context.currentTime + 0.100;
@@ -14,34 +14,32 @@
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
-    for (var h = 0; h < 4; h++) {
+    for (var h = 0; h < 8; h++) {
 	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
 		var f;
-		if (j < 4) { 
-		    f = 150 + i * 50
-			}
-		else {
-		    f = 150 + 15 * 50 - i * 50;
-		}
+		f = 150 + i * 50;
 
+		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25;
 		var v = new Voice(f);
-		v.startx(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25,  0.03);
-		if (i === 0 || i === 6 || i === 7 ||  i === 12) {
-		    makesound(bufferList[1]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		h > 1 && v.startx(time,  0.05);
+		if (i === 0 ||  i === 10) {
+		    var s = makesound(bufferList[1], 400);
+		    s.start(time);
+		    s.stop(time + 0.1)
 		}
 
-		if (i === 0 || i === 7 || i === 9) {
-		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		if (i === 4 || i === 12) {
+		    makesound(bufferList[2]).start(time);
 		}
 
-		if (i === 4) {
-		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		if (i === 5 || i === 11 ) {
+		    makesound(bufferList[3]).start(time);
 		}
+
 	    }
 	}  
     }
-
 
 </pre>
  

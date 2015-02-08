@@ -28,11 +28,16 @@ var Voice = (function(context) {
 	Voice.prototype.startx = function(t,dec) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
-	    this.vca.gain.value = 1;
+	    this.vca.gain.value = 0.5;
 	    this.vco.connect(this.vca);
 	    this.vca.connect(context.destination);	    
 	    this.vco.start(t);
 	    this.vca.gain.setValueAtTime(0, dec + t);
+	    var that = this;
+	    setTimeout(function(){
+		    that.vco.stop();
+		    that.vco = null;
+		},1000 + t * 1000);
 	};
 
 
@@ -61,10 +66,16 @@ var Voice = (function(context) {
     })(context);
 
 
-makesound = function(buffer) {
+makesound = function(buffer, ff) {
     var source = context.createBufferSource();
     source.buffer = buffer;
-    source.connect(context.destination);
+    //    source.connect(context.destination);
+    var gainNode = context.createGain();
+    gainNode.gain.value = 0.5; // reduce volume by 1/4
+    source.playbackRate.value = rnd(5,50) / 10 ;
+    source.connect(gainNode);
+    gainNode.connect(context.destination);
+
     return source;
 };
 
@@ -78,30 +89,29 @@ function finishedLoading(bufferList) {
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
-    for (var h = 0; h < 4; h++) {
+    for (var h = 0; h < 8; h++) {
 	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
 		var f;
-		if (j < 4) { 
-		    f = 150 + i * 50
-			}
-		else {
-		    f = 150 + 15 * 50 - i * 50;
-		}
+		f = 150 + i * 50;
 
+		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25;
 		var v = new Voice(f);
-		v.startx(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25,  0.03);
-		if (i === 0 || i === 6 || i === 7 ||  i === 12) {
-		    makesound(bufferList[1]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		h > 1 && v.startx(time,  0.05);
+		if (i === 0 ||  i === 10) {
+		    var s = makesound(bufferList[1], 400);
+		    s.start(time);
+		    s.stop(time + 0.1)
 		}
 
-		if (i === 0 || i === 7 || i === 9) {
-		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		if (i === 4 || i === 12) {
+		    makesound(bufferList[2]).start(time);
 		}
 
-		if (i === 4) {
-		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		if (i === 5 || i === 11 ) {
+		    makesound(bufferList[3]).start(time);
 		}
+
 	    }
 	}  
     }
@@ -114,6 +124,7 @@ bufferLoader = new BufferLoader(
       'sounds/snare.wav',
       'sounds/kick.wav',
       'sounds/hihat.wav',
+      'sounds/Clap.wav',
     ],
     finishedLoading
     );
