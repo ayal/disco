@@ -113,9 +113,9 @@ function finishedLoading(bufferList) {
       }
   }
 
-
+play(rhythm)
   play(queue);
-  play(rhythm)
+  
 }
 
 
