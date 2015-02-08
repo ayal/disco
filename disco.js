@@ -94,26 +94,20 @@ var play = function (q) {
 	}, 10);
 };
 
+makesound = function(buffer) {
+    var source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    return source;
+}
+
 function finishedLoading(bufferList) {
-  var hihat = context.createBufferSource();
-  var kick = context.createBufferSource();
-  var snare = context.createBufferSource();
-
-  hihat.buffer = bufferList[0];
-  kick.buffer = bufferList[0];
-  snare.buffer = bufferList[0];
-
-  hihat.connect(context.destination);
-  kick.connect(context.destination);
-  snare.connect(context.destination);
-
-
   for (var h = 0; h <1; h++) {
       for (var j = 0; j < 5; j++) {
 	  for (var i = 0; i < 16; i++) {
 	      playfreq(150 + i * 50, 110 + j * 1, queue);   
 	      if (i % 2 === 0) {
-		  playinst(hihat, 220, rhythm);   
+		  playinst(makesound(bufferList[0]), 220, rhythm);   
 	      }
 	  }
       }
