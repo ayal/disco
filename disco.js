@@ -108,7 +108,7 @@ function finishedLoading(bufferList) {
 	  for (var i = 0; i < 16; i++) {
 	      playfreq(150 + i * 50, 110 + j * 1, queue);   
 	      if (i % 4 === 0) {
-		  playinst(makesound(bufferList[0]), i === 0 ? 110 : 330, rhythm);   
+		  playinst(makesound(bufferList[0]), i === 0 ? 110 : 440, rhythm);   
 	      }
 	  }
       }
@@ -124,8 +124,8 @@ play(queue, x);
 bufferLoader = new BufferLoader(
     context,
     [
-      'sounds/kick.wav',
       'sounds/snare.wav',
+      'sounds/kick.wav',
       'sounds/hihat.wav',
     ],
     finishedLoading
