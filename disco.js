@@ -78,10 +78,6 @@ var play = function (q) {
 		}
 
 		if (new Date - lasttime >= interval) {
-		    if (q.length % 2 === 0) {
-			hihat.start(0);
-		    }
-
 		    voice.start();
 
 		    q = q.splice(1);
