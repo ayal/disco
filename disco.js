@@ -65,8 +65,8 @@ var playinst = function(inst,i,q) {
 };
 
 
-var play = function (q) {
-    var lasttime = lasttime || new Date; 
+var play = function (q, d) {
+    var lasttime = lasttime || d; 
     var lastvoice;
     var playinterval = {};
     playinterval['handle'] = setInterval(function(){
@@ -108,14 +108,15 @@ function finishedLoading(bufferList) {
 	  for (var i = 0; i < 16; i++) {
 	      playfreq(150 + i * 50, 110 + j * 1, queue);   
 	      if (i % 4 === 0) {
-		  playinst(makesound(bufferList[0]), 440, rhythm);   
+		  playinst(makesound(bufferList[0]), i === 0 ? 110 : 440, rhythm);   
 	      }
 	  }
       }
   }
 
-play(rhythm)
- // play(queue);
+x =  new Date();
+play(rhythm,x);
+play(queue, x);
   
 }
 
