@@ -1,6 +1,7 @@
 var context = new AudioContext();
 var vco = context.createOscillator();
 
+
 var Voice = (function(context) {
 	function Voice(frequency){
 	    this.frequency = frequency;
@@ -51,29 +52,39 @@ var Voice = (function(context) {
 
 
 queue = [];
+rhythm = [];
 
 
-var playfreq = function(f,i) {
+var playfreq = function(f,i,q) {
     var voice = new Voice(f);
-    queue.push({interval:i, voice: voice});
+    q.push({interval:i, voice: voice});
+};
+
+var playinst = function(inst,i,q) {
+    q.push({interval:i, inst: inst});
 };
 
 
-var play = function () {
+var play = function (q) {
     lasttime = window.lasttime || new Date; 
     window.playinterval = setInterval(function(){
-	    if (queue.length) {
-		var interval = queue[0].interval;
-		var voice = queue[0].voice;
+	    if (q.length) {
+		var interval = q[0].interval;
+		var voice = q[0].voice || q[0].inst;
+		
 
 		if (new Date - lasttime >= interval - 50) {
 		    window.lastvoice && lastvoice.stop();
 		}
 
 		if (new Date - lasttime >= interval) {
+		    if (q.length % 2 === 0) {
+			hihat.start(0);
+		    }
+
 		    voice.start();
 
-		    queue = queue.splice(1);
+		    q = q.splice(1);
 		    lasttime = new Date();
 		    lastvoice = voice;
 		}
@@ -86,14 +97,45 @@ var play = function () {
 	}, 10);
 };
 
-for (var h = 0; h <1; h++) {
-    for (var j = 0; j < 5; j++) {
-	for (var i = 0; i < 16; i++) {
-	    
-	playfreq(150 + i * 50, 110 + j * 1);   
-	    
-	}
-    }
+function finishedLoading(bufferList) {
+  var hihat = context.createBufferSource();
+  var kick = context.createBufferSource();
+  var snare = context.createBufferSource();
+
+  hihat.buffer = bufferList[0];
+  kick.buffer = bufferList[0];
+  snare.buffer = bufferList[0];
+
+  hihat.connect(context.destination);
+  kick.connect(context.destination);
+  snare.connect(context.destination);
+
+
+  for (var h = 0; h <1; h++) {
+      for (var j = 0; j < 5; j++) {
+	  for (var i = 0; i < 16; i++) {
+	      playfreq(150 + i * 50, 110 + j * 1, queue);   
+	      if (i % 2 === 0) {
+		  playinst(hihat, 220, rhythm);   
+	      }
+	  }
+      }
+  }
+
+
+  play(queue);
+  play(rhythm)
 }
 
-	play();
+
+bufferLoader = new BufferLoader(
+    context,
+    [
+      'sounds/hihat.wav',
+      'sounds/kick.wav',
+      'sounds/snare.wav',
+    ],
+    finishedLoading
+    );
+
+bufferLoader.load();
