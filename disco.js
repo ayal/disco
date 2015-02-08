@@ -106,15 +106,15 @@ function finishedLoading(bufferList) {
       for (var j = 0; j < 5; j++) {
 	  for (var i = 0; i < 16; i++) {
 	      playfreq(150 + i * 50, 110 + j * 1, queue);   
-	      if (i % 2 === 0) {
-		  playinst(makesound(bufferList[0]), 220, rhythm);   
+	      if (i % 4 === 0) {
+		  playinst(makesound(bufferList[0]), 440, rhythm);   
 	      }
 	  }
       }
   }
 
 
-//  play(queue);
+  play(queue);
   play(rhythm)
 }
 
