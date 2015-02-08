@@ -115,7 +115,7 @@ function finishedLoading(bufferList) {
   }
 
 x =  new Date();
-play(rhythm,x);
+play(rhythm,x, true);
 play(queue, x);
   
 }
