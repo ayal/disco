@@ -61,7 +61,7 @@ var playfreq = function(f,i) {
 
 var play = function () {
     lasttime = window.lasttime || new Date; 
-    setInterval(function(){
+    window.playinterval = setInterval(function(){
 	    if (queue.length) {
 		var interval = queue[0].interval;
 		var voice = queue[0].voice;
@@ -79,6 +79,7 @@ var play = function () {
 		}
 	    }
 	    else {
+	    	window.clearInterval(window.playinterval);
 		lastvoice.stop();
 		location.href = 'https://www.youtube.com/watch?v=VDxrIJXFjIU'
 	    }
@@ -89,10 +90,10 @@ for (var h = 0; h <1; h++) {
     for (var j = 0; j < 5; j++) {
 	for (var i = 0; i < 13; i++) {
 	    if (i === 1) {
-		playfreq(100 + i * 50, 400 + j * 2);   
+		playfreq(100 + i * 50, 400 + j * 10);   
 	    }
 	    else {
-		playfreq(100 + i * 50, 100 + j * 2);   
+		playfreq(100 + i * 50, 100 + j * 10);   
 	    }
 	}
     }
