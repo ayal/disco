@@ -25,6 +25,16 @@ var Voice = (function(context) {
 	    }
 	}
 
+	Voice.prototype.startx = function(t,dec) {
+	    this.vco.type = vco.SINE;
+	    this.vco.frequency.value = this.frequency;
+	    this.vca.gain.value = 1;
+	    this.vco.connect(this.vca);
+	    this.vca.connect(context.destination);	    
+	    this.vco.start(t);
+	    this.vca.gain.setValueAtTime(0, dec + t);
+	};
+
 
 	Voice.prototype.start = function() {
 	    var rgbav = 'rgba(' + this.frequency / 2.5 + ',0,' + this.frequency / 2.5 + ',' + 1 + ')';
@@ -51,73 +61,50 @@ var Voice = (function(context) {
     })(context);
 
 
-queue = [];
-rhythm = [];
-
-
-var playfreq = function(f,i,q) {
-    var voice = new Voice(f);
-    q.push({interval:i, voice: voice});
-};
-
-var playinst = function(inst,i,q) {
-    q.push({interval:i, inst: inst});
-};
-
-
-var play = function (q, d, nostop) {
-    var lasttime = lasttime || d; 
-    var lastvoice;
-    var playinterval = {};
-    playinterval['handle'] = setInterval(function(){
-	    if (q.length) {
-		var interval = q[0].interval;
-		var voice = q[0].voice || q[0].inst;
-		
-
-		if (new Date - lasttime >= interval - 50) {
-		    !nostop && lastvoice && lastvoice.stop();
-		}
-
-		if (new Date - lasttime >= interval) {
-		    voice.start();
-
-		    q = q.splice(1);
-		    lasttime = new Date();
- 		    lastvoice = voice;
-		}
-	    }
-	    else {
-	    	window.clearInterval(playinterval['handle']);
-		lastvoice.stop();
-		location.href = 'https://www.youtube.com/watch?v=VDxrIJXFjIU#t=3'
-	    }
-	}, 10);
-};
-
 makesound = function(buffer) {
     var source = context.createBufferSource();
     source.buffer = buffer;
     source.connect(context.destination);
     return source;
+};
+
+var rnd = function(a,b) {
+    return Math.floor(Math.random() * b) + a;
 }
 
 function finishedLoading(bufferList) {
-  for (var h = 0; h <1; h++) {
-      for (var j = 0; j < 8; j++) {
-	  for (var i = 0; i < 16; i++) {
-	      playfreq(150 + i * 50, 100 + j * 1, queue);   
-	      if (i % 4 === 0) {
-		  playinst(makesound(bufferList[(i / 4) % 2]), (i === 0 && j === 0) ? 100 : 400, rhythm);   
-	      }
-	  }
-      }
-  }
+    var startTime = context.currentTime + 0.100;
+    var tempo = 140; // BPM (beats per minute)
+    var bps = 60 / tempo;
+    var eighthNoteTime = (60 / tempo) / 2;
 
-x =  new Date();
-play(rhythm,x, true);
-play(queue, x);
-  
+    for (var h = 0; h < 4; h++) {
+	for (var j = 0; j < 8; ++j) {
+	    for (var i = 0; i < 16; ++i) {
+		var f;
+		if (j < 4) { 
+		    f = 150 + i * 50
+			}
+		else {
+		    f = 150 + 15 * 50 - i * 50;
+		}
+
+		var v = new Voice(f);
+		v.startx(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25,  0.03);
+		if (i === 0 || i === 6 || i === 7 ||  i === 12) {
+		    makesound(bufferList[1]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		}
+
+		if (i === 0 || i === 7 || i === 9) {
+		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		}
+
+		if (i === 4) {
+		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		}
+	    }
+	}  
+    }
 }
 
 

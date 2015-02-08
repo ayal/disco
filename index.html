@@ -6,109 +6,43 @@
 <body style="">
 
 <script src="bufferloader.js"></script>
-<script src="disco.js"></script>
+<script src="disco.js?v=1"></script>
 
 <pre style="font-size:20px">
-var context = new AudioContext();
-var vco = context.createOscillator();
+    var startTime = context.currentTime + 0.100;
+    var tempo = 140; // BPM (beats per minute)
+    var bps = 60 / tempo;
+    var eighthNoteTime = (60 / tempo) / 2;
 
-var Voice = (function(context) {
-	function Voice(frequency){
-	    this.frequency = frequency;
-	    this.vco = context.createOscillator();
-	    this.vca = context.createGain();
-
-	};
-
-	Voice.prototype.stop = function() {
-	    if (this.vco) {
-		try {
-		    var that = this;
-		    this.vca.gain.value = 0;
-		    setTimeout(function(){
-			    that.vco && that.vco.stop();
-			    that.vco = null;
-			},100);
-		}
-		catch(e) {
-		}
-	    }
-	}
-
-
-	Voice.prototype.start = function() {
-	    var rgbav = 'rgba(' + this.frequency / 2.5 + ',0,' + this.frequency / 2.5 + ',' + 1 + ')';
-	    $('body').css('background-color', rgbav)
-
-	    /* VCO */
-	    this.vco.type = vco.SINE;
-	    this.vco.frequency.value = this.frequency;
-
-	    this.vca.gain.value = 1;
-
-	    /* connections */
-	    this.vco.connect(this.vca);
-	    this.vca.connect(context.destination);
-	    
-	    try {
-		this.vco.start(0);
-	    }
-	    catch (ex) {
-	    }
-	};
-
-	return Voice;
-    })(context);
-
-
-queue = [];
-
-
-var playfreq = function(f,i) {
-    var voice = new Voice(f);
-    queue.push({interval:i, voice: voice});
-};
-
-
-var play = function () {
-    lasttime = window.lasttime || new Date; 
-    setInterval(function(){
-	    if (queue.length) {
-		var interval = queue[0].interval;
-		var voice = queue[0].voice;
-
-		if (new Date - lasttime >= interval - 50) {
-		    window.lastvoice && lastvoice.stop();
+    for (var h = 0; h < 4; h++) {
+	for (var j = 0; j < 8; ++j) {
+	    for (var i = 0; i < 16; ++i) {
+		var f;
+		if (j < 4) { 
+		    f = 150 + i * 50
+			}
+		else {
+		    f = 150 + 15 * 50 - i * 50;
 		}
 
-		if (new Date - lasttime >= interval) {
-		    voice.start();
+		var v = new Voice(f);
+		v.startx(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25,  0.03);
+		if (i === 0 || i === 6 || i === 7 ||  i === 12) {
+		    makesound(bufferList[1]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		}
 
-		    queue = queue.splice(1);
-		    lasttime = new Date();
-		    lastvoice = voice;
+		if (i === 0 || i === 7 || i === 9) {
+		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
+		}
+
+		if (i === 4) {
+		    makesound(bufferList[2]).start(startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25);
 		}
 	    }
-	    else {
-		lastvoice.stop();
-	    }
-	}, 10);
-};
-
-for (var h = 0; h < 3; h++) {
-    for (var j = 0; j < 10; j++) {
-	for (var i = 0; i < 13; i++) {
-	    if (i === 1) {
-		playfreq(100 + i * 50, 500 + j * 5);   
-	    }
-	    else {
-		playfreq(100 + i * 50, 100 + j * 5);   
-	    }
-	}
+	}  
     }
-}
 
-play();
+
 </pre>
  
 </body>
