@@ -66,7 +66,8 @@ var playinst = function(inst,i,q) {
 
 
 var play = function (q) {
-    lasttime = window.lasttime || new Date; 
+    var lasttime = lasttime || new Date; 
+    var lastvoice;
     var playinterval = {};
     playinterval['handle'] = setInterval(function(){
 	    if (q.length) {
@@ -75,7 +76,7 @@ var play = function (q) {
 		
 
 		if (new Date - lasttime >= interval - 50) {
-		    window.lastvoice && lastvoice.stop();
+		    lastvoice && lastvoice.stop();
 		}
 
 		if (new Date - lasttime >= interval) {
@@ -83,7 +84,7 @@ var play = function (q) {
 
 		    q = q.splice(1);
 		    lasttime = new Date();
-		    lastvoice = voice;
+ 		    lastvoice = voice;
 		}
 	    }
 	    else {
