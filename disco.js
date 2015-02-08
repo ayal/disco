@@ -88,13 +88,10 @@ var play = function () {
 
 for (var h = 0; h <1; h++) {
     for (var j = 0; j < 5; j++) {
-	for (var i = 0; i < 13; i++) {
-	    if (i === 1) {
-		playfreq(100 + i * 50, 400 + j * 10);   
-	    }
-	    else {
-		playfreq(100 + i * 50, 100 + j * 10);   
-	    }
+	for (var i = 0; i < 16; i++) {
+	    
+	playfreq(100 + i * 50, 100 + j * 10);   
+	    
 	}
     }
 }
