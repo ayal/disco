@@ -106,9 +106,9 @@ function finishedLoading(bufferList) {
   for (var h = 0; h <1; h++) {
       for (var j = 0; j < 8; j++) {
 	  for (var i = 0; i < 16; i++) {
-	      playfreq(150 + i * 50, 110 + j * 1, queue);   
+	      playfreq(150 + i * 50, 100 + j * 1, queue);   
 	      if (i % 4 === 0) {
-		  playinst(makesound(bufferList[(i / 4) % 2]), (i === 0 && j === 0) ? 110 : 440, rhythm);   
+		  playinst(makesound(bufferList[(i / 4) % 2]), (i === 0 && j === 0) ? 100 : 400, rhythm);   
 	      }
 	  }
       }
