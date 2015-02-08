@@ -120,7 +120,7 @@ function finishedLoading(bufferList) {
   }
 
 
-  play(queue);
+//  play(queue);
   play(rhythm)
 }
 
