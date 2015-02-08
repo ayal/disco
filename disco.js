@@ -87,12 +87,12 @@ var play = function () {
 
 for (var h = 0; h <1; h++) {
     for (var j = 0; j < 5; j++) {
-	for (var i = 0; i < 14; i++) {
+	for (var i = 0; i < 13; i++) {
 	    if (i === 1) {
-		playfreq(200 + i * 50, 500 + j * 2);   
+		playfreq(100 + i * 50, 400 + j * 2);   
 	    }
 	    else {
-		playfreq(200 + i * 50, 100 + j * 2);   
+		playfreq(100 + i * 50, 100 + j * 2);   
 	    }
 	}
     }
