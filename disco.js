@@ -94,6 +94,10 @@ function finishedLoading(bufferList) {
     }
 }
 
+setTimeout(function(){
+		location.href='https://www.youtube.com/watch?v=VDxrIJXFjIU#t=3';
+},30000)
+
 
 bufferLoader = new BufferLoader(
     context,
