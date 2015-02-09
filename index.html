@@ -14,14 +14,19 @@
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
-    for (var h = 0; h < 2; h++) {
+    for (var h = 0; h < 3; h++) {
 	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
+		var f;
 		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25;
+
 		var v = new Voice(150 + i * 50);
-		h > 0 && v.startx(time,  0.05);
+		h > 0 && h < 2 && v.startx(time,  0.05);
+
 		if (i === 0 || i === 2 || i === 10) {
 		    makesound(bufferList[1]).start(time);
+		    var timex = startTime + (h * 8 * 16 + j * 16 + i + 0.25) * bps * 0.75;
+		    makesound(bufferList[3]).start(timex);
 		}
 
 		if (i === 4 || i === 12 || i === 7 || i === 9) {
@@ -29,8 +34,7 @@
 		}
 
 		if ([0,2,4,6,7,8,9,10,12,14].indexOf(i) !== -1) {
-		    var hh = makesound(bufferList[2]);
-		    hh.start(time);
+		    makesound(bufferList[2]).start(time);
 		}
 
 	    }
