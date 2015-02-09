@@ -62,14 +62,12 @@ var rnd = function(a,b) {
 
 function finishedLoading(bufferList) {
     var startTime = context.currentTime + 0.100;
-    var tempo = 140; // BPM (beats per minute)
+    var tempo = 150; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
     for (var h = 0; h < 3; h++) {
-    	bps = h > 1 ? 60 / 160 : bps;
-    	
-	for (var j = 0; j < 8; ++j) {
+    	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
 	    	
 		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps *  0.25;
