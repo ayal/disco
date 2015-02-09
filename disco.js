@@ -62,7 +62,7 @@ var rnd = function(a,b) {
 
 function finishedLoading(bufferList) {
     var startTime = context.currentTime + 0.100;
-    var tempo = 160; // BPM (beats per minute)
+    var tempo = 100; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
@@ -96,7 +96,7 @@ function finishedLoading(bufferList) {
 
 setTimeout(function(){
 		location.href='https://www.youtube.com/watch?v=VDxrIJXFjIU#t=3';
-},40000)
+},35000)
 
 
 bufferLoader = new BufferLoader(
