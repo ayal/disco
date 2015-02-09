@@ -96,7 +96,7 @@ function finishedLoading(bufferList) {
 
 setTimeout(function(){
 		location.href='https://www.youtube.com/watch?v=VDxrIJXFjIU#t=3';
-},30000)
+},20000)
 
 
 bufferLoader = new BufferLoader(
