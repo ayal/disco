@@ -67,10 +67,12 @@ function finishedLoading(bufferList) {
     var eighthNoteTime = (60 / tempo) / 2;
 
     for (var h = 0; h < 3; h++) {
+    	bps = h > 1 ? 60 / 160 : bps;
+    	
 	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
-		var f;
-		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25;
+	    	
+		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * * 0.25;
 
 		var v = new Voice(150 + i * 50);
 		h > 0 && h < 2 && v.startx(time,  0.05);
