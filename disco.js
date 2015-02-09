@@ -49,7 +49,7 @@ makesound = function(buffer) {
     source.buffer = buffer;
     var gainNode = context.createGain();
     gainNode.gain.value = 0.5; // reduce volume by 1/4
-    //source.playbackRate.value = rnd(5,50) / 10 ;
+    source.playbackRate.value = rnd(1,50) / 10 ;
     source.connect(gainNode);
     gainNode.connect(context.destination);
 
@@ -70,13 +70,15 @@ function finishedLoading(bufferList) {
 	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
 		var f;
-		f = 150 + i * 50;
-
 		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25;
-		var v = new Voice(f);
+
+		var v = new Voice(150 + i * 50);
 		h > 0 && v.startx(time,  0.05);
+
 		if (i === 0 || i === 2 || i === 10) {
 		    makesound(bufferList[1]).start(time);
+		    var timex = startTime + (h * 8 * 16 + j * 16 + i + 0.25) * bps * 0.75;
+		    makesound(bufferList[3]).start(timex);
 		}
 
 		if (i === 4 || i === 12 || i === 7 || i === 9) {
@@ -84,8 +86,7 @@ function finishedLoading(bufferList) {
 		}
 
 		if ([0,2,4,6,7,8,9,10,12,14].indexOf(i) !== -1) {
-		    var hh = makesound(bufferList[2]);
-		    hh.start(time);
+		    makesound(bufferList[2]).start(time);
 		}
 
 	    }

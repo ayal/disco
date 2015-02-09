@@ -6,7 +6,7 @@
 <body style="">
 
 <script src="bufferloader.js"></script>
-<script src="disco.js?v=4"></script>
+<script src="disco.js?v=5"></script>
 
 <pre style="font-size:20px">
     var startTime = context.currentTime + 0.100;
@@ -17,11 +17,8 @@
     for (var h = 0; h < 2; h++) {
 	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 16; ++i) {
-		var f;
-		f = 150 + i * 50;
-
 		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps * 0.25;
-		var v = new Voice(f);
+		var v = new Voice(150 + i * 50);
 		h > 0 && v.startx(time,  0.05);
 		if (i === 0 || i === 2 || i === 10) {
 		    makesound(bufferList[1]).start(time);
