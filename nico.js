@@ -77,14 +77,14 @@ function finishedLoading(bufferList) {
 		if (i === 0) {
 		    makesound(bufferList[1]).start(time(i));
 		    var v = new Voice(150 + i * 50);
-		    v.startx(time(i + 0.25), time(i + 2.5));
+		    v.startx(time(i + 0.25), 0.25);
 		}
 		
 		if (i === 3) {
 		    makesound(bufferList[1]).start(time(i + 0.5));
 		    makesound(bufferList[1]).start(time(i + 2));
 	        var v = new Voice(250 + i * 50);
-		    v.startx(time(i + 0.5), time(i + 1.5));
+		    v.startx(time(i + 0.5), 0.25);
 		}
 
 		if (i === 2 || i === 6) {
