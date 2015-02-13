@@ -62,32 +62,27 @@ var rnd = function(a,b) {
 
 function finishedLoading(bufferList) {
     var startTime = context.currentTime + 0.100;
-    var tempo = 150; // BPM (beats per minute)
+    var tempo = 80; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
     for (var h = 0; h < 3; h++) {
     	for (var j = 0; j < 8; ++j) {
-	    for (var i = 0; i < 16; ++i) {
+	    for (var i = 0; i < 8; ++i) {
 	    	
-		var time = startTime + (h * 8 * 16 + j * 16 + i) * bps *  0.25;
+		var time = function(x) {return startTime + (h * 8 * 16 + j * 16 + x) * bps *  0.25};
 
 		var v = new Voice(150 + i * 50);
-		h > 0 && h < 2 && v.startx(time,  0.05);
-
-		if (i === 0 || i === 2 || i === 10) {
-		    makesound(bufferList[1]).start(time);
-		    var timex = startTime + (h * 8 * 16 + j * 16 + i + 0.25) * bps * 0.75;
-		    makesound(bufferList[3]).start(timex);
+	
+		if (i === 0 || i === 5 || i === 6) {
+		    makesound(bufferList[1]).start(time(i));
 		}
 
-		if (i === 4 || i === 12 || i === 7 || i === 9) {
-		    makesound(bufferList[0]).start(time);
+		if (i === 3 || i === 8) {
+		    makesound(bufferList[3]).start(time);
 		}
 
-		if ([0,2,4,6,7,8,9,10,12,14].indexOf(i) !== -1) {
-		    makesound(bufferList[2]).start(time);
-		}
+		
 
 	    }
 	}  
