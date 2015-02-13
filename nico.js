@@ -49,7 +49,7 @@ makesound = function(buffer) {
     source.buffer = buffer;
     var gainNode = context.createGain();
     gainNode.gain.value = 0.5; // reduce volume by 1/4
-    source.playbackRate.value = rnd(1,50) / 10 ;
+    //source.playbackRate.value = rnd(1,50) / 10 ;
     source.connect(gainNode);
     gainNode.connect(context.destination);
 
@@ -74,8 +74,13 @@ function finishedLoading(bufferList) {
 
 		var v = new Voice(150 + i * 50);
 	
-		if (i === 0 || i === 5 || i === 6) {
+		if (i === 0) {
 		    makesound(bufferList[1]).start(time(i));
+		}
+		
+		if (i === 6) {
+		    makesound(bufferList[1]).start(time(i));
+		    makesound(bufferList[1]).start(time(i + 0.5));
 		}
 
 		if (i === 3 || i === 8) {
