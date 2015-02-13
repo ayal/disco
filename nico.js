@@ -80,10 +80,10 @@ function finishedLoading(bufferList) {
 		
 		if (i === 5) {
 		    makesound(bufferList[1]).start(time(i));
-		    makesound(bufferList[1]).start(time(i + 1));
+		    makesound(bufferList[1]).start(time(i + 2));
 		}
 
-		if (i === 3 || i === 7) {
+		if (i === 2 || i === 7) {
 		    makesound(bufferList[3]).start(time(i));
 		}
 
