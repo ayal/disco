@@ -83,7 +83,7 @@ function finishedLoading(bufferList) {
 		    makesound(bufferList[1]).start(time(i + 2));
 		}
 
-		if (i === 2 || i === 7) {
+		if (i === 2 || i === 6) {
 		    makesound(bufferList[3]).start(time(i));
 		}
 
