@@ -70,7 +70,7 @@ function finishedLoading(bufferList) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
 	    	
-		var time = function(x) {return startTime + (h * 8 * 16 + j * 16 + x) * bps *  0.25};
+		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25};
 
 		var v = new Voice(150 + i * 50);
 	
