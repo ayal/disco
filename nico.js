@@ -62,7 +62,7 @@ var rnd = function(a,b) {
 
 function finishedLoading(bufferList) {
     var startTime = context.currentTime + 0.100;
-    var tempo = 60; // BPM (beats per minute)
+    var tempo = 40; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
@@ -78,7 +78,7 @@ function finishedLoading(bufferList) {
 		    makesound(bufferList[1]).start(time(i));
 		}
 		
-		if (i === 3) {
+		if (i === 4) {
 		    makesound(bufferList[1]).start(time(i + 0.5));
 		    makesound(bufferList[1]).start(time(i + 2));
 		}
