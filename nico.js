@@ -28,7 +28,7 @@ var Voice = (function(context) {
 	Voice.prototype.startx = function(t,dec) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
-	    this.vca.gain.value = 0.5;
+	    this.vca.gain.value = 0.25;
 	    this.vco.connect(this.vca);
 	    this.vca.connect(context.destination);	    
 	    this.vco.start(t);
@@ -76,15 +76,15 @@ function finishedLoading(bufferList) {
 	         
 		if (i === 0) {
 		    makesound(bufferList[1]).start(time(i));
-		    var v = new Voice(150 + i * 50);
-		    v.startx(time(i + 0.25), 0.25);
+		    var v = new Voice(350 + i * 50);
+		    v.startx(time(i + 0.25), 0.15);
 		}
 		
 		if (i === 3) {
 		    makesound(bufferList[1]).start(time(i + 0.5));
 		    makesound(bufferList[1]).start(time(i + 2));
-	        var v = new Voice(250 + i * 50);
-		    v.startx(time(i + 0.5), 0.25);
+	        var v = new Voice(550 + i * 50);
+		    v.startx(time(i + 0.5), 0.35);
 		}
 
 		if (i === 2 || i === 6) {
