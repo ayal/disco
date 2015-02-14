@@ -7,7 +7,6 @@ var Voice = (function(context) {
 	    this.frequency = frequency;
 	    this.vco = context.createOscillator();
 	    this.vca = context.createGain();
-
 	};
 
 	Voice.prototype.stop = function() {
@@ -25,12 +24,14 @@ var Voice = (function(context) {
 	    }
 	}
 
-	Voice.prototype.startx = function(t,dec) {
+	Voice.prototype.startx = function(t,dec,g) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
-	    this.vca.gain.value = 1;
+	    this.vca.gain.value = 0.5;
+
 	    this.vco.connect(this.vca);
 	    this.vca.connect(context.destination);	    
+
 	    this.vco.start(t);
 	    this.vca.gain.setValueAtTime(0, dec + t);
 	    var that = this;
@@ -69,34 +70,35 @@ function finishedLoading(bufferList) {
     for (var h = 0; h < 2; h++) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
-	    	
+	    	console.log('j',j,'h',h)
 		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25};
 
-		var v = new Voice(150 + i * 50);
-	         
-		if ([0].indexOf(i) !== -1  && j > 3) {
-		    		    makesound(bufferList[1]).start(time(i));
-		    var v = new Voice(100);
-		    v.startx(time(i), 0.15);
-		    
-		    //var v = new Voice(650);
-		    //v.startx(time(i + 2), 0.15);
-		}
-		
-		if ([3].indexOf(i) !== -1  && j > 3) {
-		    makesound(bufferList[1]).start(time(i + 0.5));
-		    makesound(bufferList[1]).start(time(i + 2));
-	            /*var v = new Voice(rnd(1,20) * 50);
-		    v.startx(time(i + 0.5), 0.35);
-		    var v = new Voice(rnd(1,20) * 50);
-		    v.startx(time(i + 1.2), 0.65);*/
+		if ([0].indexOf(i) !== -1 && (j > 2  || h > 0 && j > 0 && j < 7)) {
+		    makesound(bufferList[1]).start(time(i));
 		}
 
-		if ([2,6].indexOf(i) !== -1  && j > 3) {
+		if ([0].indexOf(i) !== -1) {
+		    var v = new Voice(130.81);
+		    v.startx(time(i), 0.7);
+
+
+		    var v = new Voice(116.54);
+		    v.startx(time(i+3), 0.7);
+
+		    var v = new Voice(98.00);
+		    v.startx(time(i+6), 0.7);
+		}
+		
+		if ([3].indexOf(i) !== -1 && (j > 2 || h > 0 && j > 0  && j < 7)) {
+		    makesound(bufferList[1]).start(time(i + 0.5));
+		    makesound(bufferList[1]).start(time(i + 2));
+		}
+
+		if ([2,6].indexOf(i) !== -1 && (j> 2  || h > 0 && j > 0  && j < 7)) {
 		    makesound(bufferList[3]).start(time(i));
 		}
 
-		if ([0,2,4].indexOf(i) !== -1) {
+		if ([0,2,4].indexOf(i) !== -1 && (j > 4  || h > 0 && j > 0  && j < 7)) {
 		    var mrate = 0.7 + rnd(5,10) / 10;
 
 		    var s = makesound(bufferList[4], mrate, 0.1);
