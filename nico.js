@@ -27,7 +27,7 @@ var Voice = (function(context) {
 	Voice.prototype.startx = function(t,dec,g) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
-	    this.vca.gain.value = 0.5;
+	    this.vca.gain.value = 0.25;
 
 	    this.vco.connect(this.vca);
 	    this.vca.connect(context.destination);	    
