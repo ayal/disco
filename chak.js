@@ -43,9 +43,23 @@ function draw() {
 
     for(var i = 0; i < bufferLength; i++) {
 	barHeight = (data[i] / 128) * HEIGHT ;
-	canvasCtx.fillStyle = 'rgb(' + data[i]  + ',0,' + data[i] +  ')';
+	if (data[i] < 128 / 3) {
+	    canvasCtx.fillStyle = 'rgb('+data[i]+',' + data[i]  + ',0)';
+	}
+
+	else if (data[i] > 128 / 3 && data[i] < 128 / 3 * 2) {
+	    canvasCtx.fillStyle = 'rgb(0,' + data[i]  + ',' + data[i] +  ')';
+	}
+
+	else {
+	    canvasCtx.fillStyle = 'rgb('+data[i]+',0,' + data[i] +')';
+	}
+	canvasCtx.beginPath();
 	//	console.log(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
-	canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth*2,barWidth*2);
+	canvasCtx.arc(x, HEIGHT-barHeight/2, barWidth*1.2, 0, 2 * Math.PI, false);
+	canvasCtx.closePath();
+	canvasCtx.fill();
+	//	canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth*2,barWidth*10);
 
 	x += barWidth + 1;
     }
@@ -133,7 +147,8 @@ makesound = function(buffer,x,g) {
 
 var rnd = function(min,max) {
   return Math.floor(Math.random()*(max-min+1)+min);
-}
+};
+
 
 function finishedLoading(bufferList) {
     var startTime = context.currentTime + 0.100;
@@ -141,7 +156,7 @@ function finishedLoading(bufferList) {
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
     var voices = [146.83, 123.47, 196.00]
-    for (var h = 0; h < 3; h++) {
+    for (var h = 0; h < 4; h++) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
 
@@ -193,8 +208,8 @@ function finishedLoading(bufferList) {
 		    s.start(time(i+0.66));
 		    s.stop(time(i + 1.75));
 
-
 		}
+
 
 		/*		if ([0,2,4].indexOf(i) !== -1 && (j > 4  || h > 0 && j > 0  && j < 7)) {
 		    var mrate = 0.7 + rnd(5,10) / 10;
