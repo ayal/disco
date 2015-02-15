@@ -25,18 +25,32 @@ var Voice = (function(context) {
 	}
 
 	Voice.prototype.startx = function(t,dec,g) {
-	    this.vco.type = vco.SINE;
+	    this.vco.type = vco.TRIANGLE;
 	    this.vco.frequency.value = this.frequency;
-	    this.vca.gain.value = 0.25;
+	    this.vca.gain.value = 0.05;
+
+	    var mod = context.createOscillator();
+	    mod.frequency.value = rnd(1,30) / 5;
+	    
+	    var modGain = context.createGain();
+	    modGain.gain.value = 0.05;
+
+	    mod.connect(modGain);
+	    modGain.connect(this.vca.gain);
 
 	    this.vco.connect(this.vca);
-	    this.vca.connect(context.destination);	    
-
+	    this.vca.connect(context.destination);
+	    
 	    this.vco.start(t);
+	    mod.start(t);
+	    
 	    this.vca.gain.setValueAtTime(0, dec + t);
 	    var that = this;
+
 	    setTimeout(function(){
 		    that.vco.stop();
+		    mod.stop();
+		    mod = null;
 		    that.vco = null;
 		},1000 + t * 1000);
 	};
@@ -49,7 +63,7 @@ makesound = function(buffer,x,g) {
     var source = context.createBufferSource();
     source.buffer = buffer;
     var gainNode = context.createGain();
-    gainNode.gain.value = g || 0.5; // reduce volume by 1/4
+    gainNode.gain.value = g || 0.3; // reduce volume by 1/4
     x && (source.playbackRate.value = x);
     source.connect(gainNode);
     gainNode.connect(context.destination);
@@ -66,7 +80,7 @@ function finishedLoading(bufferList) {
     var tempo = 55; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
-
+    var voices = [146.83, 123.47, 196.00, 196.00, 123.47]
     for (var h = 0; h < 2; h++) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
@@ -74,54 +88,60 @@ function finishedLoading(bufferList) {
 		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25};
 
 
-		if ([0].indexOf(i) !== -1 && j > 1) {
-		    var v = new Voice(130.81);
-		    v.startx(time(i), 0.4);
+		if ([0].indexOf(i) !== -1) {
 
-		    var v = new Voice(150.81);
-		    v.startx(time(i + 1), 0.5);
+		    var o = rnd(1,3);
+		    var p = rnd(0,4);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i), 0.3);
 
-		    var v = new Voice(116.54);
+		    var o = rnd(1,3);
+		    var p = rnd(0,4);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i + 3), 0.3);
+
+		    /*var v = new Voice(261.63);
 		    v.startx(time(i+3), 0.7);
 
-		    var v = new Voice(166.54);
-		    v.startx(time(i+4), 0.7);
-
-		    var v = new Voice(148.00);
+		    var v = new Voice(146.83);
 		    v.startx(time(i+5), 0.7);
 
-		    var v = new Voice(98.00);
-		    v.startx(time(i+6), 0.7);
+		    var v = new Voice(110.00);
+		    v.startx(time(i+4), 0.7);*/
+		    var p = rnd(0,4);
+		    var o = rnd(1,3);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i+5), 0.3);
 		}
 
-		if ([0].indexOf(i) !== -1 && (j > -1  || h > 0 && j > 0 && j < 7)) {
+		if ([0].indexOf(i) !== -1 && (j > 1  || h > 0 && j > 1 && j < 7)) {
 		    makesound(bufferList[1]).start(time(i));
 		}
 
 		
-		if ([0].indexOf(i) !== -1 && (j > -1 || h > 0 && j > 0  && j < 7)) {
+		if ([0].indexOf(i) !== -1 && (j > 1 || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[3]).start(time(i + 1.5));
 		    makesound(bufferList[3]).start(time(i + 3 ));
 		}
 
-		if ([4].indexOf(i) !== -1 && (j > -1 || h > 0 && j > 0  && j < 7)) {
+		if ([4].indexOf(i) !== -1 && (j > 1 || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[1]).start(time(i ));
 		    makesound(bufferList[1]).start(time(i + 1));
 		}
 
 
-		if ([6].indexOf(i) !== -1 && (j> -1  || h > 0 && j > 0  && j < 7)) {
+		if ([6].indexOf(i) !== -1 && (j> 1  || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[3]).start(time(i));
 		}
 
-		if ([0,2,4,6].indexOf(i) !== -1 && ( h > 0 && j > 1  && j < 7)) {
+		if ([0,2,4,6].indexOf(i) !== -1 && (h > 0 && j > 1  && j < 8)) {
 		    var mrate = 1;
 		    
-		    var s = makesound(bufferList[4], mrate, 0.03);
+		    var s = makesound(bufferList[4], mrate, 0.02);
 		    s.start(time(i));
 		    s.stop(time(i + 1));
 		    
-		    var s = makesound(bufferList[4], mrate-0.1, 0.03);
+		    var s = makesound(bufferList[4], mrate-0.1, 0.02);
 		    s.start(time(i+0.66));
 		    s.stop(time(i + 1.75));
 
