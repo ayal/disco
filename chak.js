@@ -120,8 +120,8 @@ var Voice = (function(context) {
 	    
 	    setTimeout(function(){
 	    	that.vco.disconnect();
-	    	that.mod1.disconnect();
-	    	that.mod2.disconnect();
+	    	that.mod1.modulator.disconnect();
+	    	that.mod2.modulator.disconnect();
 		    //		    that.vco.stop();
 		    //that.mod1.modulator.stop();
 		    //that.mod2.modulator.stop()
