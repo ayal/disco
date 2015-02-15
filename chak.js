@@ -23,6 +23,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
 analyser = context.createAnalyser();
+
 analyser.connect(context.destination);
 analyser.fftSize = 2048;
 var bufferLength = analyser.fftSize;
@@ -117,6 +118,9 @@ var Voice = (function(context) {
 	    var that = this;
 	    
 	    setTimeout(function(){
+	    	that.vco.disconnect();
+	    	that.mod1.disconnect();
+	    	that.mod2.disconnect();
 		    //		    that.vco.stop();
 		    //that.mod1.modulator.stop();
 		    //that.mod2.modulator.stop()
