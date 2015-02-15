@@ -161,7 +161,7 @@ function finishedLoading(bufferList) {
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
     var voices = [146.83, 123.47, 196.00]
-    for (var h = 0; h < 4; h++) {
+    for (var h = 0; h < 5; h++) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
 
@@ -208,10 +208,12 @@ function finishedLoading(bufferList) {
 		    var s = makesound(bufferList[4], mrate, 0.02);
 		    s.start(time(i));
 		    s.stop(time(i + 1));
+		    s.disconnect();
 		    
 		    var s = makesound(bufferList[4], mrate-0.1, 0.02);
 		    s.start(time(i+0.66));
 		    s.stop(time(i + 1.75));
+		    s.disconnect();
 
 		}
 
