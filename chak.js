@@ -1,5 +1,7 @@
 var context = new AudioContext();
+
 var vco = context.createOscillator();
+
 
 
 function Modulator (freq, gain,t) {
@@ -10,6 +12,50 @@ function Modulator (freq, gain,t) {
   this.gain.gain.value = gain;
   this.modulator.connect(this.gain);
 }
+
+var canvas = document.getElementById('mycanvas');
+var canvasCtx = canvas.getContext('2d');
+
+var WIDTH = Math.max(document.documentElement.clientWidth, window.innerWidth || 0) - 100
+var HEIGHT = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 100
+
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
+
+analyser = context.createAnalyser();
+analyser.connect(context.destination);
+analyser.fftSize = 2048;
+var bufferLength = analyser.fftSize;
+var data = new Uint8Array(bufferLength);
+    
+
+function draw() {
+    drawVisual = requestAnimationFrame(draw);
+
+    analyser.getByteFrequencyData(data);
+        
+    canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    var barWidth = Math.max((WIDTH / bufferLength) * 5,3);
+    var barHeight;
+    var x = 50;
+
+    for(var i = 0; i < bufferLength; i++) {
+	barHeight = (data[i] / 128) * HEIGHT ;
+	canvasCtx.fillStyle = 'rgb(' + data[i]  + ',0,' + data[i] +  ')';
+	//	console.log(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
+	canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth*2,barWidth*2);
+
+	x += barWidth + 1;
+    }
+
+
+    
+
+};
+
+draw();
 
 
 var Voice = (function(context) {
@@ -44,9 +90,9 @@ var Voice = (function(context) {
 	    this.mod1.gain.connect(this.vca);
 	    this.mod2.gain.connect(this.mod1.gain);
 
-	    this.vca.gain.value = 0.2;
+	    this.vca.gain.value = 0.1;
 	    this.vco.connect(this.vca)
-	    this.vca.connect(context.destination);
+	    this.vca.connect(analyser);
 
 	    this.mod1.modulator.start(t)
 	    this.mod2.modulator.start(t)
@@ -57,13 +103,13 @@ var Voice = (function(context) {
 	    var that = this;
 	    
 	    setTimeout(function(){
-		    that.vco.stop();
-		    that.mod1.modulator.stop();
-		    that.mod2.modulator.stop()
+		    //		    that.vco.stop();
+		    //that.mod1.modulator.stop();
+		    //that.mod2.modulator.stop()
 
-		    that.mod1 = null;
-		    that.mod2 = null;
-		    that.vco = null;
+		    //that.mod1 = null;
+		    //that.mod2 = null;
+		    //that.vco = null;
 		},1000 + (t+dec) * 1000);
 
 
@@ -80,7 +126,7 @@ makesound = function(buffer,x,g) {
     gainNode.gain.value = g || 0.3; // reduce volume by 1/4
     x && (source.playbackRate.value = x);
     source.connect(gainNode);
-    gainNode.connect(context.destination);
+    gainNode.connect(analyser);
 
     return source;
 };
@@ -98,13 +144,13 @@ function finishedLoading(bufferList) {
     for (var h = 0; h < 3; h++) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
-	    	console.log('j',j,'h',h)
+
 		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25};
 
 
 		if ([0].indexOf(i) !== -1) {
 
-		    var o = 0.5;
+		    var o = rnd(1,2) / 2;
 		    var p = rnd(2,2);
 		    var v = new Voice(voices[0] * o);
 		    v.startx(time(i), 0.8);
