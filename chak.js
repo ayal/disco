@@ -2,6 +2,16 @@ var context = new AudioContext();
 var vco = context.createOscillator();
 
 
+function Modulator (freq, gain,t) {
+  this.modulator = context.createOscillator();
+  this.gain = context.createGain();
+  this.modulator.type = this.modulator.SINE;
+  this.modulator.frequency.value = freq;
+  this.gain.gain.value = gain;
+  this.modulator.connect(this.gain);
+}
+
+
 var Voice = (function(context) {
 	function Voice(frequency){
 	    this.frequency = frequency;
@@ -25,47 +35,38 @@ var Voice = (function(context) {
 	}
 
 	Voice.prototype.startx = function(t,dec,g) {
-	    this.vco.type = vco.TRIANGLE;
+	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
-	    this.vca.gain.value = 0.05;
 
-	    var mod2 = context.createOscillator();
-	    mod2.frequency.value = this.frequency * 2;
-	    
-	    var modGain2 = context.createGain();
-	    modGain2.gain.value = 0.3;
+	    this.mod1 = new Modulator(this.frequency * rnd(1,4), 1);
+	    this.mod2 = new Modulator(this.frequency / rnd(1/4), 0.8);
 
-	    mod2.connect(modGain2);
+	    this.mod1.gain.connect(this.vca);
+	    this.mod2.gain.connect(this.mod1.gain);
 
-
-	    var mod1 = context.createOscillator();
-	    mod1.frequency.value = this.frequency/2;
-	    
-	    var modGain1 = context.createGain();
-	    modGain1.gain.value = 0.1;
-
-	    mod1.connect(modGain1);
-
-	    modGain2.connect(modGain1);
-	    modGain1.connect(this.vca.gain);
-
-	    this.vco.connect(this.vca);
+	    this.vca.gain.value = 0.2;
+	    this.vco.connect(this.vca)
 	    this.vca.connect(context.destination);
-	    
-	    this.vco.start(t);
-	    mod1.start(t);
-	    mod2.start(t);
-	    
-	    this.vca.gain.setValueAtTime(0, dec + t);
-	    var that = this;
 
+	    this.mod1.modulator.start(t)
+	    this.mod2.modulator.start(t)
+	    this.vco.start(t);
+	    
+	    this.vca.gain.linearRampToValueAtTime(0, t + dec)
+
+	    var that = this;
+	    
 	    setTimeout(function(){
 		    that.vco.stop();
-		    mod1.stop();
-		    mod2.stop();
-		    mod = null;
+		    that.mod1.modulator.stop();
+		    that.mod2.modulator.stop()
+
+		    that.mod1 = null;
+		    that.mod2 = null;
 		    that.vco = null;
-		},1000 + t * 1000);
+		},1000 + (t+dec) * 1000);
+
+
 	};
 
 	return Voice;
@@ -93,8 +94,8 @@ function finishedLoading(bufferList) {
     var tempo = 55; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
-    var voices = [146.83, 123.47, 196.00, 196.00, 123.47]
-    for (var h = 0; h < 2; h++) {
+    var voices = [146.83, 123.47, 196.00]
+    for (var h = 0; h < 3; h++) {
     	for (var j = 0; j < 8; ++j) {
 	    for (var i = 0; i < 8; ++i) {
 	    	console.log('j',j,'h',h)
@@ -103,47 +104,35 @@ function finishedLoading(bufferList) {
 
 		if ([0].indexOf(i) !== -1) {
 
-		    var o = rnd(1,3);
-		    var p = rnd(0,4);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i), 0.3);
+		    var o = 0.5;
+		    var p = rnd(2,2);
+		    var v = new Voice(voices[0] * o);
+		    v.startx(time(i), 0.8);
 
-		    var o = rnd(1,3);
-		    var p = rnd(0,4);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i + 3), 0.3);
+		    var v = new Voice(voices[1] * o);
+		    v.startx(time(i + 3), 0.5);
 
-		    /*var v = new Voice(261.63);
-		    v.startx(time(i+3), 0.7);
-
-		    var v = new Voice(146.83);
-		    v.startx(time(i+5), 0.7);
-
-		    var v = new Voice(110.00);
-		    v.startx(time(i+4), 0.7);*/
-		    var p = rnd(0,4);
-		    var o = rnd(1,3);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i+5), 0.3);
+		    var v = new Voice(voices[2] * o);
+		    v.startx(time(i+5), 0.8);
 		}
 
-		if ([0].indexOf(i) !== -1 && (j > 1  || h > 0 && j > 1 && j < 7)) {
+		if ([0].indexOf(i) !== -1 && (j > 3  || h > 0 && j > 1 && j < 7)) {
 		    makesound(bufferList[1]).start(time(i));
 		}
 
 		
-		if ([0].indexOf(i) !== -1 && (j > 1 || h > 0 && j > 1  && j < 7)) {
+		if ([0].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[3]).start(time(i + 1.5));
 		    makesound(bufferList[3]).start(time(i + 3 ));
 		}
 
-		if ([4].indexOf(i) !== -1 && (j > 1 || h > 0 && j > 1  && j < 7)) {
+		if ([4].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[1]).start(time(i ));
 		    makesound(bufferList[1]).start(time(i + 1));
 		}
 
 
-		if ([6].indexOf(i) !== -1 && (j> 1  || h > 0 && j > 1  && j < 7)) {
+		if ([6].indexOf(i) !== -1 && (j> 3  || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[3]).start(time(i));
 		}
 
