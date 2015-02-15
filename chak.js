@@ -111,9 +111,9 @@ var Voice = (function(context) {
 
 	    this.mod1.modulator.start(t)
 	    this.mod2.modulator.start(t)
-	    this.vco.start(t);
+	    this.vco.start(t - 0.05);
 	    
-	    this.vca.gain.linearRampToValueAtTime(0.3, t + 0.05)
+	    this.vca.gain.linearRampToValueAtTime(0.3, t)
 	    this.vca.gain.linearRampToValueAtTime(0, t + dec)
 
 	    var that = this;
