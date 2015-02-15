@@ -105,7 +105,7 @@ var Voice = (function(context) {
 	    this.mod1.gain.connect(this.vca);
 	    this.mod2.gain.connect(this.mod1.gain);
 
-	    this.vca.gain.value = 0.1;
+	    this.vca.gain.value = 0;
 	    this.vco.connect(this.vca)
 	    this.vca.connect(analyser);
 
@@ -113,6 +113,7 @@ var Voice = (function(context) {
 	    this.mod2.modulator.start(t)
 	    this.vco.start(t);
 	    
+	    this.vca.gain.linearRampToValueAtTime(0.3, t + 0.05)
 	    this.vca.gain.linearRampToValueAtTime(0, t + dec)
 
 	    var that = this;
