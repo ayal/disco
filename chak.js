@@ -208,12 +208,12 @@ function finishedLoading(bufferList) {
 		    var s = makesound(bufferList[4], mrate, 0.02);
 		    s.start(time(i));
 		    s.stop(time(i + 1));
-		    s.disconnect();
+		
 		    
 		    var s = makesound(bufferList[4], mrate-0.1, 0.02);
 		    s.start(time(i+0.66));
 		    s.stop(time(i + 1.75));
-		    s.disconnect();
+		   
 
 		}
 
