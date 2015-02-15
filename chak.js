@@ -29,27 +29,40 @@ var Voice = (function(context) {
 	    this.vco.frequency.value = this.frequency;
 	    this.vca.gain.value = 0.05;
 
-	    var mod = context.createOscillator();
-	    mod.frequency.value = rnd(1,30) / 5;
+	    var mod2 = context.createOscillator();
+	    mod2.frequency.value = this.frequency * 2;
 	    
-	    var modGain = context.createGain();
-	    modGain.gain.value = 0.05;
+	    var modGain2 = context.createGain();
+	    modGain2.gain.value = 0.3;
 
-	    mod.connect(modGain);
-	    modGain.connect(this.vca.gain);
+	    mod2.connect(modGain2);
+
+
+	    var mod1 = context.createOscillator();
+	    mod1.frequency.value = this.frequency/2;
+	    
+	    var modGain1 = context.createGain();
+	    modGain1.gain.value = 0.1;
+
+	    mod1.connect(modGain1);
+
+	    modGain2.connect(modGain1);
+	    modGain1.connect(this.vca.gain);
 
 	    this.vco.connect(this.vca);
 	    this.vca.connect(context.destination);
 	    
 	    this.vco.start(t);
-	    mod.start(t);
+	    mod1.start(t);
+	    mod2.start(t);
 	    
 	    this.vca.gain.setValueAtTime(0, dec + t);
 	    var that = this;
 
 	    setTimeout(function(){
 		    that.vco.stop();
-		    mod.stop();
+		    mod1.stop();
+		    mod2.stop();
 		    mod = null;
 		    that.vco = null;
 		},1000 + t * 1000);
