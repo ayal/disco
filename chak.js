@@ -192,7 +192,7 @@ function finishedLoading(bufferList) {
 
 
 		    var v = new Voice(voices[3] * o);
-		    v.startx(time(i+4), 0.3);
+		    v.startx(time(i+3.3), 0.3);
 
 		}
 
