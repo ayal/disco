@@ -28,13 +28,13 @@ analyser.connect(context.destination);
 analyser.fftSize = 2048;
 var bufferLength = analyser.fftSize;
 var data = new Uint8Array(bufferLength);
-    
+
 
 function draw() {
     drawVisual = requestAnimationFrame(draw);
 
     analyser.getByteFrequencyData(data);
-        
+
     canvasCtx.fillStyle = 'rgb(0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
@@ -66,7 +66,7 @@ function draw() {
     }
 
 
-    
+
 
 };
 
@@ -99,29 +99,33 @@ var Voice = (function(context) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
 
-	    this.mod1 = new Modulator(this.frequency * rnd(1,4), 1);
-	    this.mod2 = new Modulator(this.frequency / rnd(1/4), 0.8);
+	    this.mod1 = new Modulator(this.frequency * 4, 1);
+	    this.mod2 = new Modulator(this.frequency * 2, 0 >.8);
+	    this.mod3 = new Modulator(this.frequency * Math.pow(2,rnd(-1,5)), rnd(1,10)*10);
 
 	    this.mod1.gain.connect(this.vca);
 	    this.mod2.gain.connect(this.mod1.gain);
+	    this.mod3.gain.connect(this.mod2.modulator.frequency);
 
 	    this.vca.gain.value = 0;
 	    this.vco.connect(this.vca)
 	    this.vca.connect(analyser);
 
-	    this.mod1.modulator.start(t)
-	    this.mod2.modulator.start(t)
+	    this.mod1.modulator.start(t);
+	    this.mod2.modulator.start(t);
+	    this.mod3.modulator.start(t);
 	    this.vco.start(t - 0.05);
-	    
+
 	    this.vca.gain.linearRampToValueAtTime(0.3, t)
 	    this.vca.gain.linearRampToValueAtTime(0, t + dec)
 
 	    var that = this;
-	    
+
 	    setTimeout(function(){
 	    	that.vco.disconnect();
 	    	that.mod1.modulator.disconnect();
 	    	that.mod2.modulator.disconnect();
+	    	that.mod3.modulator.disconnect();
 		    //		    that.vco.stop();
 		    //that.mod1.modulator.stop();
 		    //that.mod2.modulator.stop()
@@ -160,12 +164,17 @@ function finishedLoading(bufferList) {
     var tempo = 55; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
-    var voices = [146.83, 123.47, 196.00]
-    for (var h = 0; h < 4; h++) {
+
+    var voices1 = [146.83, 123.47, 196.00];
+    var voices2 = [123.47, 146.83, 185.00, 220.00];
+
+    for (var h = 0; h < 5; h++) {
     	for (var j = 0; j < 8; ++j) {
+            var voices  = rnd(1,2) === 1 ? voices2 : voices1;
+
 	    for (var i = 0; i < 8; ++i) {
 
-		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25};
+		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25;};
 
 
 		if ([0].indexOf(i) !== -1) {
@@ -186,7 +195,7 @@ function finishedLoading(bufferList) {
 		    makesound(bufferList[1]).start(time(i));
 		}
 
-		
+
 		if ([0].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
 		    makesound(bufferList[3]).start(time(i + 1.5));
 		    makesound(bufferList[3]).start(time(i + 3 ));
@@ -204,18 +213,27 @@ function finishedLoading(bufferList) {
 
 		if ([0,2,4,6].indexOf(i) !== -1 && (h > 0 && j > 1  && j < 8)) {
 		    var mrate = 1;
-		    
-		    var s = makesound(bufferList[4], mrate, 0.02);
+
+		    var s = makesound(bufferList[4], mrate-rnd(-1,1)/10, 0.035);
 		    s.start(time(i));
 		    s.stop(time(i + 1));
-		
-		    
-		    var s = makesound(bufferList[4], mrate-0.1, 0.02);
+
+
+		    var s = makesound(bufferList[4], mrate-rnd(-1,1)/10, 0.035);
 		    s.start(time(i+0.66));
 		    s.stop(time(i + 1.75));
-		   
+
 
 		}
+
+		if ([0].indexOf(i) !== -1 && (h > 0 && j < 1) ) {
+		    var mrate = 1;
+
+		    var s = makesound(bufferList[5], 1.1, 0.5);
+		    s.start(time(i));
+		    s.stop(time(i + 4));
+		}
+
 
 
 		/*		if ([0,2,4].indexOf(i) !== -1 && (j > 4  || h > 0 && j > 0  && j < 7)) {
@@ -228,7 +246,7 @@ function finishedLoading(bufferList) {
 		    var s1 = makesound(bufferList[4],mrate - 0.3,0.1);
 		    s1.start(time(i + 0.6));
 		    s1.stop(time(i + 1.5));
-		    
+
 		    var s2 = makesound(bufferList[4],mrate,0.1);
 		    s2.start(time(i + 1));
 		    s2.stop(time(i + 2))
@@ -237,10 +255,10 @@ function finishedLoading(bufferList) {
 		    s3.start(time(i + 1.6));
 		    s3.stop(time(i + 2.5))
 
-		    }*/		
+		    }*/
 
 	    }
-	}  
+	}
     }
 }
 
@@ -253,6 +271,7 @@ bufferLoader = new BufferLoader(
       'sounds/hihat.wav',
       'sounds/Clap.wav',
       'sounds/maraca.mp3',
+      'sounds/hippy.mp3',
     ],
     finishedLoading
     );
