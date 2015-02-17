@@ -50,7 +50,10 @@ draw = function(){
      	
     for(var i = 0; i < bufferLength; i++) {
 	barHeight = (data[i] / 256) * (HEIGHT - 100) ;
-	if (data[i] < 128 / 3) {
+	if (data[i] < 10) {
+	    canvasCtx.fillStyle = 'rgb(20,20,0)';
+        }
+	else if (data[i] < 128 / 3) {
 	    canvasCtx.fillStyle = 'rgb('+data[i]+',' + data[i]  + ',0)';
 	}
 
@@ -68,8 +71,9 @@ draw = function(){
 	canvasCtx.fill();
 
     if (i === 10) {
-    		  canvasCtx.font = (16 + (data[i] / 128)*4) +  "px Verdana";
-	          canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles", 10, HEIGHT - 10);
+    	
+	canvasCtx.font = (13 + (data[i] / 128)*6) +  "px Verdana";
+	canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles", 10, HEIGHT - 10);
      }
 	
 	
