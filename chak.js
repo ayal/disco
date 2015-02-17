@@ -68,8 +68,8 @@ draw = function(){
 	canvasCtx.fill();
 
     	if (i === 100) {
-    		  canvasCtx.font="30px Verdana";
-	canvasCtx.fillText("Hippy Hoppy",100, data[i]);
+    		  canvasCtx.font="16px Verdana";
+	canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles",100, data[i]);
 
     	}
 	
