@@ -11,6 +11,12 @@ function Modulator (freq, gain,t) {
   this.modulator.frequency.value = freq;
   this.gain.gain.value = gain;
   this.modulator.connect(this.gain);
+  this.disconnect = function(){
+      this.gain.disconnect();
+      this.modulator.disconnect();
+      this.vca = null;
+      this.modulator = null;
+  }
 }
 
 var canvas = document.getElementById('mycanvas');
@@ -29,8 +35,7 @@ analyser.fftSize = 2048;
 var bufferLength = analyser.fftSize;
 var data = new Uint8Array(bufferLength);
 
-
-function draw() {
+draw = function(){
     drawVisual = requestAnimationFrame(draw);
 
     analyser.getByteFrequencyData(data);
@@ -70,7 +75,7 @@ function draw() {
 
 };
 
-draw();
+drawit = _.once(draw);
 
 
 var Voice = (function(context) {
@@ -79,21 +84,6 @@ var Voice = (function(context) {
 	    this.vco = context.createOscillator();
 	    this.vca = context.createGain();
 	};
-
-	Voice.prototype.stop = function() {
-	    if (this.vco) {
-		try {
-		    var that = this;
-		    this.vca.gain.value = 0;
-		    setTimeout(function(){
-			    that.vco && that.vco.stop();
-			    that.vco = null;
-			},100);
-		}
-		catch(e) {
-		}
-	    }
-	}
 
 	Voice.prototype.startx = function(t,dec,g) {
 	    this.vco.type = vco.SINE;
@@ -123,19 +113,16 @@ var Voice = (function(context) {
 
 	    setTimeout(function(){
 	    	that.vco.disconnect();
-	    	that.mod1.modulator.disconnect();
-	    	that.mod2.modulator.disconnect();
-	    	that.mod3.modulator.disconnect();
-		    //		    that.vco.stop();
-		    //that.mod1.modulator.stop();
-		    //that.mod2.modulator.stop()
-
-		    //that.mod1 = null;
-		    //that.mod2 = null;
-		    //that.vco = null;
+	    	that.mod1.disconnect();
+	    	that.mod2.disconnect();
+	    	that.mod3.disconnect();
+		that.vca.disconnect();
+		that.vca = null;
+		that.vco = null;
+		that.mod1 = null;
+		that.mod2 = null;
+		that.mod3 = null;
 		},1000 + (t+dec) * 1000);
-
-
 	};
 
 	return Voice;
@@ -150,7 +137,6 @@ makesound = function(buffer,x,g) {
     x && (source.playbackRate.value = x);
     source.connect(gainNode);
     gainNode.connect(analyser);
-
     return source;
 };
 
@@ -158,109 +144,125 @@ var rnd = function(min,max) {
   return Math.floor(Math.random()*(max-min+1)+min);
 };
 
+    
+var gen = _.debounce(function(okgo) {
+	var startTime = context.currentTime + 1.5;
+	var tempo = 55; // BPM (beats per minute)
+	var bps = 60 / tempo;
+	var eighthNoteTime = (60 / tempo) / 2;
 
-function finishedLoading(bufferList) {
-    var startTime = context.currentTime + 2;
-    var tempo = 55; // BPM (beats per minute)
-    var bps = 60 / tempo;
-    var eighthNoteTime = (60 / tempo) / 2;
+	var voices1 = [146.83, 123.47, 196.00, 123.47];
+	var voices2 = [123.47, 146.83, 185.00, 220.00];
 
-    var voices1 = [146.83, 123.47, 196.00, 123.47];
-    var voices2 = [123.47, 146.83, 185.00, 220.00];
+	drawit();
+	
+	var s = makesound(bufferList[5], 0.8 + rnd(1,10)/10, 0.5);
+	s.start(0);
+	s.stop(4);
 
-    var s = makesound(bufferList[6], 0.6 + rnd(1,10)/10, 0.5);
-    s.start(0);
-    s.stop(4);
+	for (var h =  0; h < 3; h++) {
+	    for (var j = 0; j < 8; ++j) {
+		var voices  = rnd(1,2) === 1 ? voices2 : voices1;
 
+		for (var i = 0; i < 8; ++i) {
 
-    for (var h = 0; h < 2; h++) {
-    	for (var j = 0; j < 8; ++j) {
-            var voices  = rnd(1,2) === 1 ? voices2 : voices1;
-
-	    for (var i = 0; i < 8; ++i) {
-
-		var time = function(x) {return startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25;};
-
-
-		if ([0].indexOf(i) !== -1) {
-
-		    var o = 1/2;
-		    var p = rnd(0,3);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i + 1), 0.33);
+		    var time = function(x) {
+			lasttime = startTime + (h * 8 * 8 + j * 8 + x) * bps *  0.25;
+			return lasttime;
+		    };
 
 
-		    var p = rnd(0,3);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i+1.66), 0.33);
+		    if ([0].indexOf(i) !== -1) {
+
+			var o = 1/2;
+			var p = rnd(0,3);
+			var v = new Voice(voices[p] * o);
+			v.startx(time(i + 1), 0.33);
 
 
-		    var p = rnd(0,3);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i+2.33), 0.33);
+			var p = rnd(0,3);
+			var v = new Voice(voices[p] * o);
+			v.startx(time(i+1.66), 0.33);
 
 
-		    var p = rnd(0,3);
-		    var v = new Voice(voices[p] * o);
-		    v.startx(time(i+3.33), 0.33);
+			var p = rnd(0,3);
+			var v = new Voice(voices[p] * o);
+			v.startx(time(i+2.33), 0.33);
+
+
+			var p = rnd(0,3);
+			var v = new Voice(voices[p] * o);
+			v.startx(time(i+3.33), 0.33);
+		    }
+
+
+		    if ([0].indexOf(i) !== -1 && (j > 3  || h > 0 && j > 1 && j < 7)) {
+			makesound(bufferList[1]).start(time(i));
+		    }
+
+
+		    if ([0].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
+			makesound(bufferList[3]).start(time(i + 1.5));
+			makesound(bufferList[3]).start(time(i + 3 ));
+		    }
+
+		    if ([4].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
+			makesound(bufferList[1]).start(time(i ));
+			makesound(bufferList[1]).start(time(i + 1));
+		    }
+
+
+		    if ([6].indexOf(i) !== -1 && (j> 3  || h > 0 && j > 1  && j < 7)) {
+			makesound(bufferList[3]).start(time(i));
+		    }
+
+		    if ([0,2,4,6].indexOf(i) !== -1 && (h > 0 && j > 1  && j < 8)) {
+			var mrate = 1;
+
+			var s = makesound(bufferList[4], mrate-rnd(-1,1)/10, 0.035);
+			s.start(time(i));
+			s.stop(time(i + 1));
+
+
+			var s = makesound(bufferList[4], mrate-rnd(-1,1)/10, 0.035);
+			s.start(time(i+0.66));
+			s.stop(time(i + 1.75));
+
+
+		    }
+
+		    if ([0].indexOf(i) !== -1 && (h > 0 && j < 1)) {
+			var mrate = 1;
+
+			var s = makesound(bufferList[5], 1.1, 0.5);
+			s.start(time(i));
+			s.stop(time(i + 4));
+		    }
+
+		    if ([4].indexOf(i) !== -1 && (h > 0)) {
+			var mrate = 1;
+
+			var s = makesound(bufferList[6], 0.6 + rnd(1,10)/10, 0.5);
+			s.start(time(i));
+			s.stop(time(i + 4));
+		    }
+
+
 		}
-
-
-		if ([0].indexOf(i) !== -1 && (j > 3  || h > 0 && j > 1 && j < 7)) {
-		    makesound(bufferList[1]).start(time(i));
-		}
-
-
-		if ([0].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
-		    makesound(bufferList[3]).start(time(i + 1.5));
-		    makesound(bufferList[3]).start(time(i + 3 ));
-		}
-
-		if ([4].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
-		    makesound(bufferList[1]).start(time(i ));
-		    makesound(bufferList[1]).start(time(i + 1));
-		}
-
-
-		if ([6].indexOf(i) !== -1 && (j> 3  || h > 0 && j > 1  && j < 7)) {
-		    makesound(bufferList[3]).start(time(i));
-		}
-
-		if ([0,2,4,6].indexOf(i) !== -1 && (h > 0 && j > 1  && j < 8)) {
-		    var mrate = 1;
-
-		    var s = makesound(bufferList[4], mrate-rnd(-1,1)/10, 0.035);
-		    s.start(time(i));
-		    s.stop(time(i + 1));
-
-
-		    var s = makesound(bufferList[4], mrate-rnd(-1,1)/10, 0.035);
-		    s.start(time(i+0.66));
-		    s.stop(time(i + 1.75));
-
-
-		}
-
-		if ([0].indexOf(i) !== -1 && (h > 0 && j < 1) ) {
-		    var mrate = 1;
-
-		    var s = makesound(bufferList[5], 1.1, 0.5);
-		    s.start(time(i));
-		    s.stop(time(i + 4));
-		}
-
-		if ([4].indexOf(i) !== -1 && (h > 0)) {
-		    var mrate = 1;
-
-		    var s = makesound(bufferList[6], 0.6 + rnd(1,10)/10, 0.5);
-		    s.start(time(i));
-		    s.stop(time(i + 4));
-		}
-
-
 	    }
 	}
-    }
+
+	setTimeout(function(){
+		gen(1);
+	    },(lasttime - startTime)*1000)
+	
+    },0)
+
+function finishedLoading(bufferList) {
+
+    window.bufferList = bufferList;
+    gen();
+
 }
 
 
