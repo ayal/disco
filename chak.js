@@ -43,7 +43,7 @@ draw = function(){
     analyser.getByteFrequencyData(data1);
     analyser.getByteTimeDomainData(data2);
 
-    data = _.union(data1,data2);
+    data = data1.concat(data2);
 
     canvasCtx.fillStyle = 'rgb(0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
