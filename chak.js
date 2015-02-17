@@ -50,8 +50,8 @@ draw = function(){
      	
     for(var i = 0; i < bufferLength; i++) {
 	barHeight = (data[i] / 256) * (HEIGHT - 100) ;
-	if (data[i] < 10) {
-	    canvasCtx.fillStyle = 'rgb(20,20,0)';
+	if (data[i] < 50) {
+	    canvasCtx.fillStyle = 'rgb(50,50,0)';
         }
 	else if (data[i] < 128 / 3) {
 	    canvasCtx.fillStyle = 'rgb('+data[i]+',' + data[i]  + ',0)';
@@ -66,7 +66,7 @@ draw = function(){
 	}
 	canvasCtx.beginPath();
 	//	console.log(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
-	canvasCtx.arc(x, HEIGHT - barHeight, barWidth*1.2, 0, 2 * Math.PI, false);
+	canvasCtx.arc(x, HEIGHT - barHeight - 100, barWidth*1.2, 0, 2 * Math.PI, false);
 	canvasCtx.closePath();
 	canvasCtx.fill();
 
