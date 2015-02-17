@@ -49,7 +49,7 @@ draw = function(){
 
      	
     for(var i = 0; i < bufferLength; i++) {
-	barHeight = (data[i] / 128) * HEIGHT;
+	barHeight = (data[i] / 256) * HEIGHT - 100;
 	if (data[i] < 100) {
 	    canvasCtx.fillStyle = 'rgb(0,100,0)';
         }
