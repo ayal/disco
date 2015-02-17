@@ -53,7 +53,7 @@ draw = function(){
 	if (data[i] < 42) {
 	    canvasCtx.fillStyle = 'rgb(0,100,0)';
         }
-	else if (data[i] > 256 / 3) {
+	else if (data[i] > 42 && data[i] < 256 / 3) {
 	    canvasCtx.fillStyle = 'rgb(0,' + data[i]  + ',0)';
 	}
 
