@@ -63,7 +63,7 @@ draw = function(){
 	}
 	canvasCtx.beginPath();
 	//	console.log(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
-	canvasCtx.arc(x, HEIGHT-barHeight/2-20, barWidth*1.2, 0, 2 * Math.PI, false);
+	canvasCtx.arc(x, HEIGHT-barHeight/2-50, barWidth*1.2, 0, 2 * Math.PI, false);
 	canvasCtx.closePath();
 	canvasCtx.fill();
 
