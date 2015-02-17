@@ -99,9 +99,9 @@ var Voice = (function(context) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
 
-	    this.mod1 = new Modulator(this.frequency * 4, 1);
-	    this.mod2 = new Modulator(this.frequency * 2, 0 >.8);
-	    this.mod3 = new Modulator(this.frequency * Math.pow(2,rnd(-1,5)), rnd(1,10)*10);
+	    this.mod1 = new Modulator(this.frequency * Math.pow(2,rnd(2,3)), 0.8);
+	    this.mod2 = new Modulator(this.frequency * Math.pow(2,rnd(-2,3)), rnd(1,10)/ 10);
+	    this.mod3 = new Modulator(this.frequency * Math.pow(2,rnd(-2,5)), rnd(1,10)*10);
 
 	    this.mod1.gain.connect(this.vca);
 	    this.mod2.gain.connect(this.mod1.gain);
@@ -179,21 +179,25 @@ function finishedLoading(bufferList) {
 
 		if ([0].indexOf(i) !== -1) {
 
-		    var o = rnd(1,2) / 2;
-		    var p = rnd(2,2);
-		    var v = new Voice(voices[0] * o);
-		    v.startx(time(i), 0.5);
-
-		    var v = new Voice(voices[1] * o);
-		    v.startx(time(i + 1.66), 0.3);
-
-		    var v = new Voice(voices[2] * o);
-		    v.startx(time(i+2.333), 0.3);
+		    var o = 1/2;
+		    var p = rnd(0,3);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i + 1), 0.33);
 
 
-		    var v = new Voice(voices[3] * o);
-		    v.startx(time(i+3.3), 0.3);
+		    var p = rnd(0,3);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i+1.66), 0.33);
 
+
+		    var p = rnd(0,3);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i+2.33), 0.33);
+
+
+		    var p = rnd(0,3);
+		    var v = new Voice(voices[p] * o);
+		    v.startx(time(i+3.33), 0.33);
 		}
 
 
