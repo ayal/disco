@@ -38,7 +38,7 @@ var data = new Uint8Array(bufferLength);
 draw = function(){
     drawVisual = requestAnimationFrame(draw);
 
-    analyser.getByteFrequencyData(data);
+    analyser.getByteTimeDomainData(data);
 
     canvasCtx.fillStyle = 'rgb(0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
