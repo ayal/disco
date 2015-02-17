@@ -32,23 +32,28 @@ analyser = context.createAnalyser();
 
 analyser.connect(context.destination);
 analyser.fftSize = 2048;
-var bufferLength = analyser.fftSize;
-var data = new Uint8Array(bufferLength);
+var bufferLength = analyser.fftSize
+var data1 = new Uint8Array(bufferLength);
+var data2 = new Uint8Array(bufferLength);
+
 
 draw = function(){
     drawVisual = requestAnimationFrame(draw);
 
-    analyser.getByteTimeDomainData(data);
+    analyser.getByteFrequencyData(data1);
+    analyser.getByteTimeDomainData(data2);
+
+    data = _.union(data1,data2);
 
     canvasCtx.fillStyle = 'rgb(0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    var barWidth = Math.max((WIDTH / bufferLength) * 5,3);
+    var barWidth = Math.max((WIDTH / (bufferLength*2)) * 5,3);
     var barHeight;
     var x = 50;
 
      	
-    for(var i = 0; i < bufferLength; i++) {
+    for(var i = 0; i < bufferLength*2; i++) {
 	barHeight = (data[i] / 256) * HEIGHT;
 	if (data[i] < 42) {
 	    canvasCtx.fillStyle = 'rgb(0,100,0)';
