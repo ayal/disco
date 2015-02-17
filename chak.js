@@ -254,7 +254,7 @@ var gen = _.debounce(function(okgo) {
 
 	setTimeout(function(){
 location.reload()
-},(lasttime - startTime)*1000)
+},(lasttime - startTime)*1200)
 	
     },0)
 
