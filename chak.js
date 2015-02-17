@@ -67,11 +67,11 @@ draw = function(){
 	canvasCtx.closePath();
 	canvasCtx.fill();
 
-    /*if (i === 100) {
-    		  canvasCtx.font= (16 + (data[i] / 128)*4) +  "px Verdana";
-	          canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles",, HEIGHT - 10);
+    if (i === 10) {
+    		  canvasCtx.font = (16 + (data[i] / 128)*4) +  "px Verdana";
+	          canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles", 10, HEIGHT - 10);
 
-     }*/
+     }
 	
 	
 
@@ -264,7 +264,7 @@ var gen = _.debounce(function(okgo) {
 
 	setTimeout(function(){
 location.reload()
-},(lasttime - startTime)*1200)
+},(lasttime - startTime)*1000)
 	
     },0)
 
