@@ -47,6 +47,9 @@ draw = function(){
     var barHeight;
     var x = 50;
 
+       canvasCtx.font="30px Verdana";
+	canvasCtx.fillText("Hippy Hoppy",100,x, HEIGHT-((data[100] / 128) * HEIGHT )/2);
+	
     for(var i = 0; i < bufferLength; i++) {
 	barHeight = (data[i] / 128) * HEIGHT ;
 	if (data[i] < 128 / 3) {
@@ -65,6 +68,9 @@ draw = function(){
 	canvasCtx.arc(x, HEIGHT-barHeight/2, barWidth*1.2, 0, 2 * Math.PI, false);
 	canvasCtx.closePath();
 	canvasCtx.fill();
+	
+	
+
 	//	canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth*2,barWidth*10);
 
 	x += barWidth + 1;
