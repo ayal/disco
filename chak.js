@@ -69,7 +69,7 @@ draw = function(){
 
     	if (i === 100) {
     		  canvasCtx.font="16px Verdana";
-	canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles",100, HEIGHT - data[i]);
+	canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles",100, HEIGHT-barHeight/2);
 
     	}
 	
