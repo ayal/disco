@@ -63,14 +63,13 @@ draw = function(){
 	}
 	canvasCtx.beginPath();
 	//	console.log(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
-	canvasCtx.arc(x, HEIGHT-barHeight/2, barWidth*1.2, 0, 2 * Math.PI, false);
+	canvasCtx.arc(x, HEIGHT-barHeight/2-20, barWidth*1.2, 0, 2 * Math.PI, false);
 	canvasCtx.closePath();
 	canvasCtx.fill();
 
     if (i === 10) {
     		  canvasCtx.font = (16 + (data[i] / 128)*4) +  "px Verdana";
 	          canvasCtx.fillText("Hippy Hoppy - Music and Programming - Ayal Gelles", 10, HEIGHT - 10);
-
      }
 	
 	
