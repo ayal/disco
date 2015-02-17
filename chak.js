@@ -173,7 +173,7 @@ function finishedLoading(bufferList) {
     s.stop(4);
 
 
-    for (var h = 0; h < 5; h++) {
+    for (var h = 0; h < 2; h++) {
     	for (var j = 0; j < 8; ++j) {
             var voices  = rnd(1,2) === 1 ? voices2 : voices1;
 
