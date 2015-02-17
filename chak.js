@@ -253,8 +253,8 @@ var gen = _.debounce(function(okgo) {
 	}
 
 	setTimeout(function(){
-		gen(1);
-	    },(lasttime - startTime)*1000)
+location.reload()
+},(lasttime - startTime)*1000)
 	
     },0)
 
