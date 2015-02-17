@@ -49,12 +49,12 @@ draw = function(){
 
      	
     for(var i = 0; i < bufferLength; i++) {
-	barHeight = (data[i] / 256) * (HEIGHT - 100) ;
+	barHeight = (data[i] / 128) * HEIGHT + 50 ;
 	if (data[i] < 100) {
-	    canvasCtx.fillStyle = 'rgb(100,100,0)';
+	    canvasCtx.fillStyle = 'rgb(0,100,0)';
         }
 	else if (data[i] < 128 / 3) {
-	    canvasCtx.fillStyle = 'rgb('+data[i]+',' + data[i]  + ',0)';
+	    canvasCtx.fillStyle = 'rgb(0,' + data[i]  + ',0)';
 	}
 
 	else if (data[i] > 128 / 3 && data[i] < 128 / 3 * 2) {
