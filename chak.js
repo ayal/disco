@@ -160,13 +160,18 @@ var rnd = function(min,max) {
 
 
 function finishedLoading(bufferList) {
-    var startTime = context.currentTime + 0.100;
+    var startTime = context.currentTime + 2;
     var tempo = 55; // BPM (beats per minute)
     var bps = 60 / tempo;
     var eighthNoteTime = (60 / tempo) / 2;
 
     var voices1 = [146.83, 123.47, 196.00, 123.47];
     var voices2 = [123.47, 146.83, 185.00, 220.00];
+
+    var s = makesound(bufferList[6], 0.6 + rnd(1,10)/10, 0.5);
+    s.start(0);
+    s.stop(4);
+
 
     for (var h = 0; h < 5; h++) {
     	for (var j = 0; j < 8; ++j) {
@@ -244,28 +249,14 @@ function finishedLoading(bufferList) {
 		    s.stop(time(i + 4));
 		}
 
+		if ([4].indexOf(i) !== -1 && (h > 0)) {
+		    var mrate = 1;
 
-
-		/*		if ([0,2,4].indexOf(i) !== -1 && (j > 4  || h > 0 && j > 0  && j < 7)) {
-		    var mrate = 0.7 + rnd(5,10) / 10;
-
-		    var s = makesound(bufferList[4], mrate, 0.1);
+		    var s = makesound(bufferList[6], 0.6 + rnd(1,10)/10, 0.5);
 		    s.start(time(i));
-		    s.stop(time(i + 1));
+		    s.stop(time(i + 4));
+		}
 
-		    var s1 = makesound(bufferList[4],mrate - 0.3,0.1);
-		    s1.start(time(i + 0.6));
-		    s1.stop(time(i + 1.5));
-
-		    var s2 = makesound(bufferList[4],mrate,0.1);
-		    s2.start(time(i + 1));
-		    s2.stop(time(i + 2))
-
-		    var s3 = makesound(bufferList[4],mrate - 0.3,0.1);
-		    s3.start(time(i + 1.6));
-		    s3.stop(time(i + 2.5))
-
-		    }*/
 
 	    }
 	}
@@ -282,6 +273,7 @@ bufferLoader = new BufferLoader(
       'sounds/Clap.wav',
       'sounds/maraca.mp3',
       'sounds/hippy.mp3',
+      'sounds/muito.mp3',
     ],
     finishedLoading
     );
