@@ -48,7 +48,7 @@ draw = function(){
     var x = 50;
 
        canvasCtx.font="30px Verdana";
-	canvasCtx.fillText("Hippy Hoppy",100, HEIGHT-((data[100] / 128) * HEIGHT )/2);
+	canvasCtx.fillText("Hippy Hoppy",100, data[i]);
 	
     for(var i = 0; i < bufferLength; i++) {
 	barHeight = (data[i] / 128) * HEIGHT ;
