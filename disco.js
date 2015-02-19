@@ -106,7 +106,7 @@ bufferLoader = new BufferLoader(
       'sounds/kick.wav',
       'sounds/hihat.wav',
       'sounds/Clap.wav',
-      'sounds/maraca.aif',
+      'sounds/maraca.mp3',
     ],
     finishedLoading
     );
