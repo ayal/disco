@@ -171,8 +171,14 @@ var gen = _.debounce(function(okgo) {
 	var bps = 60 / tempo;
 	var eighthNoteTime = (60 / tempo) / 2;
 
-	var voices1 = [146.83, 123.47, 196.00, 123.47];
-	var voices2 = [123.47, 146.83, 185.00, 220.00];
+	var voices1 = [130.81,
+		       138.59,
+		       164.81,
+		       174.61,
+		       196.00,
+		       207.65,
+		       246.94];
+	var voices2 = _.map(voices1, function(x){return x*2});
 
 	drawit();
 	
@@ -215,21 +221,14 @@ var gen = _.debounce(function(okgo) {
 		    */
 
 		    if ([0].indexOf(i) !== -1) {
-			h > 0 && makesound(bufferList[5],0.7,0.5).start(time(1));
-
-			var p = rnd(0,3);
-			j > 2 && new Voice(voices[p]).startx(time(i), 0.33);
+			j === 5 && makesound(bufferList[5],0.7,0.5).start(time(1));
 
 			makesound(bufferList[1],null,0.4).start(time(i));
 
 			makesound(bufferList[3],null,0.3).start(time(i+1.33333));
 			makesound(bufferList[2],null,0.3).start(time(i+2));
-			var p = rnd(0,3);
-			j > 2 &&  new Voice(voices[p]).startx(time(i+2.8), 0.33);;
 			makesound(bufferList[3],null,0.3).start(time(i+2.8));
 
-			var p = rnd(0,3);
-			j > 2 && new Voice(voices[p]).startx(time(i+4), 0.33);
 			makesound(bufferList[1]).start(time(i+4));
 			
 			makesound(bufferList[2],null,0.3, time(i+5.8), time(i+5.33333));
@@ -237,6 +236,21 @@ var gen = _.debounce(function(okgo) {
 			makesound(bufferList[2],null,0.3, time(i+7.2), time(i+6.8));
 
 		    }
+
+		    if ([0].indexOf(i) !== -1 && h > 0) {
+			new Voice(voices[0]).startx(time(i), 0.33);
+			new Voice(voices[1]).startx(time(i+1.333), 0.33);
+			new Voice(voices[2]).startx(time(i+2), 0.33);
+			new Voice(voices[3]).startx(time(i+2.8), 0.33);
+
+
+			new Voice(voices[4]).startx(time(i+4), 0.33);
+			new Voice(voices[5]).startx(time(i+5.333), 0.33);
+			new Voice(voices[6]/(Math.sqrt(2)/2)).startx(time(i+6), 0.33);
+			new Voice(voices[6]).startx(time(i+6.8), 0.33);
+		    }
+
+
 
 		    /*
 		    if ([0].indexOf(i) !== -1 && (j > 3 || h > 0 && j > 1  && j < 7)) {
@@ -292,7 +306,7 @@ var gen = _.debounce(function(okgo) {
 
 	setTimeout(function(){
 location.reload()
-},(lasttime - startTime + 1) * 1000)
+},(lasttime - startTime + 1) * 1100)
 	
     },0)
 
