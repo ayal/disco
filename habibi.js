@@ -105,11 +105,11 @@ var Voice = (function(context) {
 
 	    this.mod1 = new Modulator(this.frequency * Math.pow(2,rnd(-2,0)), 0.8);
 	    this.mod2 = new Modulator(this.frequency * Math.pow(2,rnd(-6,2)), rnd(1,10)/ 10);
-	    this.mod3 = new Modulator(this.frequency * Math.pow(2,rnd(-6,3)), rnd(1,10)*10);
+	    //	    this.mod3 = new Modulator(this.frequency * Math.pow(2,rnd(-6,3)), rnd(1,10)*10);
 
 	    this.mod1.gain.connect(this.vca);
 	    this.mod2.gain.connect(this.mod1.gain);
-	    this.mod3.gain.connect(this.mod2.modulator.frequency);
+	    //	    this.mod3.gain.connect(this.mod2.modulator.frequency);
 
 	    this.vca.gain.value = 0;
 	    this.vco.connect(this.vca)
@@ -117,7 +117,7 @@ var Voice = (function(context) {
 
 	    this.mod1.modulator.start(t);
 	    this.mod2.modulator.start(t);
-	    this.mod3.modulator.start(t);
+	    //	    this.mod3.modulator.start(t);
 	    this.vco.start(t - 0.05);
 
 	    this.vca.gain.linearRampToValueAtTime(0.3, t)
@@ -129,13 +129,13 @@ var Voice = (function(context) {
 	    	that.vco.disconnect();
 	    	that.mod1.disconnect();
 	    	that.mod2.disconnect();
-	    	that.mod3.disconnect();
+		//	    	that.mod3.disconnect();
 		that.vca.disconnect();
 		that.vca = null;
 		that.vco = null;
 		that.mod1 = null;
 		that.mod2 = null;
-		that.mod3 = null;
+		//		that.mod3 = null;
 		},1000 + (t+dec) * 1000);
 	};
 
@@ -221,34 +221,37 @@ var gen = _.debounce(function(okgo) {
 		    */
 
 		    if ([0].indexOf(i) !== -1) {
-			j === 5 && makesound(bufferList[5],0.7,0.5).start(time(1));
+			if (j === 7 && h === 0) {
+			    makesound(bufferList[5],0.8,0.5).start(time(1));
+			}
+			else {
+			    makesound(bufferList[1],null,0.4).start(time(i));
 
-			makesound(bufferList[1],null,0.4).start(time(i));
+			    makesound(bufferList[3],null,0.3).start(time(i+1.33333));
+			    makesound(bufferList[2],null,0.3).start(time(i+2));
+			    makesound(bufferList[3],null,0.3).start(time(i+2.8));
 
-			makesound(bufferList[3],null,0.3).start(time(i+1.33333));
-			makesound(bufferList[2],null,0.3).start(time(i+2));
-			makesound(bufferList[3],null,0.3).start(time(i+2.8));
-
-			makesound(bufferList[1]).start(time(i+4));
+			    makesound(bufferList[1]).start(time(i+4));
 			
-			makesound(bufferList[2],null,0.3, time(i+5.8), time(i+5.33333));
-			makesound(bufferList[3],null,0.3).start(time(i+6));
-			makesound(bufferList[2],null,0.3, time(i+7.2), time(i+6.8));
+			    makesound(bufferList[3],null,0.3, time(i+5.8), time(i+5.33333));
+			    makesound(bufferList[2],null,0.3).start(time(i+6));
+			    makesound(bufferList[3],null,0.3, time(i+7.2), time(i+6.8));
+			}
 
 		    }
 
 		    if ([0].indexOf(i) !== -1 && h > 0) {
 			
-			new Voice(voices2[rnd(0,6)]).startx(time(i), rnd(0,10)/10);
+			new Voice(voices2[rnd(0,3)]).startx(time(i), rnd(0,10)/20);
 			//			new Voice(voices1[rnd(0,6)]/(Math.sqrt(2)/2)).startx(time(i+1), 0.333);
-			new Voice(voices2[rnd(0,6)]).startx(time(i+1.333), rnd(0,10)/10);
-			new Voice(voices2[rnd(0,6)]).startx(time(i+2), rnd(0,10)/10);
-			new Voice(voices2[rnd(0,6)]).startx(time(i+2.8), rnd(0,10)/10);
+			new Voice(voices2[rnd(0,3)]).startx(time(i+1.333), rnd(0,10)/40);
+			new Voice(voices2[rnd(0,3)]).startx(time(i+2), rnd(0,10)/40);
+			new Voice(voices2[rnd(0,3)]).startx(time(i+2.8), rnd(0,10)/40);
 
-			new Voice(voices2[rnd(0,6)]).startx(time(i+4), rnd(0,10)/10);
-			new Voice(voices2[rnd(0,6)]).startx(time(i+5.333), rnd(0,10)/10);
-			new Voice(voices1[rnd(0,6)]).startx(time(i+6), rnd(0,10)/10);
-			new Voice(voices2[rnd(0,6)]).startx(time(i+6.8), rnd(0,10)/10);
+			new Voice(voices2[rnd(3,6)]).startx(time(i+4), rnd(0,10)/20);
+			new Voice(voices2[rnd(3,6)]).startx(time(i+5.333), rnd(0,10)/40);
+			new Voice(voices1[rnd(3,6)]).startx(time(i+6), rnd(0,10)/40);
+			new Voice(voices2[rnd(3,6)]).startx(time(i+6.8), rnd(0,10)/40);
 		    }
 
 
