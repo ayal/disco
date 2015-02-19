@@ -227,15 +227,15 @@ var gen = _.debounce(function(okgo) {
 			else {
 			    makesound(bufferList[1],null,0.4).start(time(i));
 
-			    makesound(bufferList[3],null,0.3).start(time(i+1.33333));
-			    makesound(bufferList[2],null,0.3).start(time(i+2));
-			    makesound(bufferList[3],null,0.3).start(time(i+2.8));
+			    makesound(bufferList[2],null,0.3).start(time(i+1.33333));
+			    makesound(bufferList[3],null,0.3).start(time(i+2));
+			    makesound(bufferList[2],null,0.3).start(time(i+2.8));
 
-			    makesound(bufferList[1]).start(time(i+4));
+			    makesound(bufferList[rnd(1,2)]).start(time(i+4));
 			
-			    makesound(bufferList[3],null,0.3, time(i+5.8), time(i+5.33333));
-			    makesound(bufferList[2],null,0.3).start(time(i+6));
-			    makesound(bufferList[3],null,0.3, time(i+7.2), time(i+6.8));
+			    makesound(bufferList[2],null,0.3, time(i+5.8), time(i+5.33333));
+			    makesound(bufferList[3],1.2,0.3).start(time(i+6));
+			    makesound(bufferList[rnd(1,2)],null,0.3, time(i+7.2), time(i+6.8));
 			}
 
 		    }
