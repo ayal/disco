@@ -238,16 +238,17 @@ var gen = _.debounce(function(okgo) {
 		    }
 
 		    if ([0].indexOf(i) !== -1 && h > 0) {
-			new Voice(voices[0]).startx(time(i), 0.33);
-			new Voice(voices[1]).startx(time(i+1.333), 0.33);
-			new Voice(voices[2]).startx(time(i+2), 0.33);
-			new Voice(voices[3]).startx(time(i+2.8), 0.33);
+			
+			new Voice(voices2[rnd(0,6)]).startx(time(i), rnd(0,10)/10);
+			//			new Voice(voices1[rnd(0,6)]/(Math.sqrt(2)/2)).startx(time(i+1), 0.333);
+			new Voice(voices2[rnd(0,6)]).startx(time(i+1.333), rnd(0,10)/10);
+			new Voice(voices2[rnd(0,6)]).startx(time(i+2), rnd(0,10)/10);
+			new Voice(voices2[rnd(0,6)]).startx(time(i+2.8), rnd(0,10)/10);
 
-
-			new Voice(voices[4]).startx(time(i+4), 0.33);
-			new Voice(voices[5]).startx(time(i+5.333), 0.33);
-			new Voice(voices[6]/(Math.sqrt(2)/2)).startx(time(i+6), 0.33);
-			new Voice(voices[6]).startx(time(i+6.8), 0.33);
+			new Voice(voices2[rnd(0,6)]).startx(time(i+4), rnd(0,10)/10);
+			new Voice(voices2[rnd(0,6)]).startx(time(i+5.333), rnd(0,10)/10);
+			new Voice(voices1[rnd(0,6)]).startx(time(i+6), rnd(0,10)/10);
+			new Voice(voices2[rnd(0,6)]).startx(time(i+6.8), rnd(0,10)/10);
 		    }
 
 
