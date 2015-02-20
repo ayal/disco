@@ -2,8 +2,6 @@ var context = new AudioContext();
 
 var vco = context.createOscillator();
 
-
-
 function Modulator (freq, gain,t) {
   this.modulator = context.createOscillator();
   this.gain = context.createGain();
@@ -103,8 +101,8 @@ var Voice = (function(context) {
 	    this.vco.type = vco.SINE;
 	    this.vco.frequency.value = this.frequency;
 
-	    this.mod1 = new Modulator(this.frequency * Math.pow(2,rnd(-2,0)), 0.8);
-	    this.mod2 = new Modulator(this.frequency * Math.pow(2,rnd(-6,2)), rnd(1,10)/ 10);
+	    this.mod1 = new Modulator(this.frequency * Math.pow(2,rnd(-10,0)), 0.8);
+	    this.mod2 = new Modulator(this.frequency * Math.pow(2,rnd(-20,2)), rnd(1,10)/ 10);
 	    //	    this.mod3 = new Modulator(this.frequency * Math.pow(2,rnd(-6,3)), rnd(1,10)*10);
 
 	    this.mod1.gain.connect(this.vca);
@@ -120,7 +118,7 @@ var Voice = (function(context) {
 	    //	    this.mod3.modulator.start(t);
 	    this.vco.start(t - 0.05);
 
-	    this.vca.gain.linearRampToValueAtTime(0.3, t)
+	    this.vca.gain.linearRampToValueAtTime(0.1, t)
 	    this.vca.gain.linearRampToValueAtTime(0, t + dec)
 
 	    var that = this;
@@ -156,13 +154,21 @@ makesound = function(buffer,x,g,stoptime,starttime) {
 	source.start(starttime);
 	source.stop(stoptime);
     }
-
+    var origstart = source.start;
+    source.startx = function(t) {
+	origstart.bind(source)(t);
+	source.stop(t + 0.2);
+    }
     return source;
 };
 
 var rnd = function(min,max) {
   return Math.floor(Math.random()*(max-min+1)+min);
 };
+
+
+var semitone = 1.0594645615239402780161318002403;
+var qtone = semitone / 2;
 
     
 var gen = _.debounce(function(okgo) {
@@ -177,16 +183,14 @@ var gen = _.debounce(function(okgo) {
 		       174.61,
 		       196.00,
 		       207.65,
-		       246.94];
-	var voices2 = _.map(voices1, function(x){return x*2});
+		       246.94,
+		       261.63];
 
 	drawit();
 	
 
 	for (var h =  0; h < 3; h++) {
 	    for (var j = 0; j < 8; ++j) {
-		var voices  = rnd(1,2) === 1 ? voices2 : voices1;
-
 		for (var i = 0; i < 8; ++i) {
 
 		    var time = function(x) {
@@ -225,33 +229,37 @@ var gen = _.debounce(function(okgo) {
 			    makesound(bufferList[5],0.8,0.5).start(time(1));
 			}
 			else {
-			    makesound(bufferList[1],null,0.4).start(time(i));
+			    makesound(bufferList[1],0.7,1).start(time(i));
 
-			    makesound(bufferList[2],null,0.3).start(time(i+1.33333));
-			    makesound(bufferList[3],null,0.3).start(time(i+2));
-			    makesound(bufferList[2],null,0.3).start(time(i+2.8));
+			    makesound(bufferList[3],rnd(4,10)/5,0.3).startx(time(i+1.33333));
+			    makesound(bufferList[1],rnd(4,10)/5,0.3).start(time(i+2));
+			    makesound(bufferList[2],rnd(4,10)/5,0.3).startx(time(i+2.8));
 
-			    makesound(bufferList[rnd(1,2)]).start(time(i+4));
+			    makesound(bufferList[1],null,0.6).start(time(i+4));
 			
-			    makesound(bufferList[2],null,0.3, time(i+5.8), time(i+5.33333));
-			    makesound(bufferList[3],1.2,0.3).start(time(i+6));
-			    makesound(bufferList[rnd(1,2)],null,0.3, time(i+7.2), time(i+6.8));
+			    makesound(bufferList[2],rnd(4,10)/5,0.3, time(i+5.8), time(i+5.33333));
+			    makesound(bufferList[3],rnd(4,10)/5,0.3).start(time(i+6));
+			    makesound(bufferList[1],rnd(4,10)/5,0.3, time(i+7.2), time(i+6.8));
 			}
 
 		    }
 
-		    if ([0].indexOf(i) !== -1 && h > 0) {
-			
-			new Voice(voices2[rnd(0,3)]).startx(time(i), rnd(0,10)/20);
-			//			new Voice(voices1[rnd(0,6)]/(Math.sqrt(2)/2)).startx(time(i+1), 0.333);
-			new Voice(voices2[rnd(0,3)]).startx(time(i+1.333), rnd(0,10)/40);
-			new Voice(voices2[rnd(0,3)]).startx(time(i+2), rnd(0,10)/40);
-			new Voice(voices2[rnd(0,3)]).startx(time(i+2.8), rnd(0,10)/40);
+		    if ([0].indexOf(i) !== -1 && h > -1) {
+			var voices  =  _.map(voices1, function(x){return x*qtone*Math.pow(2,rnd(1,3))});
+			new Voice(voices[rnd(0,1)]).startx(time(i), 1);
 
-			new Voice(voices2[rnd(3,6)]).startx(time(i+4), rnd(0,10)/20);
-			new Voice(voices2[rnd(3,6)]).startx(time(i+5.333), rnd(0,10)/40);
-			new Voice(voices1[rnd(3,6)]).startx(time(i+6), rnd(0,10)/40);
-			new Voice(voices2[rnd(3,6)]).startx(time(i+6.8), rnd(0,10)/40);
+			new Voice(voices[rnd(0,2)]).startx(time(i+1.333), rnd(0,10)/40);
+			var voices  =  _.map(voices1, function(x){return x*qtone*Math.pow(2,rnd(1,3))});
+			new Voice(voices[rnd(0,3)]).startx(time(i+2), rnd(0,10)/40);
+			new Voice(voices[rnd(0,4)]).startx(time(i+2.8), 0.66);
+
+			// --
+			var voices  =  _.map(voices1, function(x){return x*qtone*Math.pow(2,rnd(1,3))});
+			 new Voice(voices[rnd(3,4)]).startx(time(i+4), rnd(0,10)/40);
+
+			//new Voice(voices[rnd(4,7)]).startx(time(i+5.333), rnd(0,10)/40);
+			new Voice(voices[rnd(3,7)]).startx(time(i+6), 0.333);
+			//new Voice(voices[rnd(3,7)]).startx(time(i+6.8), rnd(0,10)/40);
 		    }
 
 
