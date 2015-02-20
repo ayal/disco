@@ -141,14 +141,20 @@ var Voice = (function(context) {
     })(context);
 
 
-makesound = function(buffer,x,g,stoptime,starttime) {
+makesound = function(buffer,x,g,stoptime,starttime,f) {
     var source = context.createBufferSource();
     source.buffer = buffer;
     var gainNode = context.createGain();
     gainNode.gain.value = g || 0.3; // reduce volume by 1/4
     x && (source.playbackRate.value = x);
     source.connect(gainNode);
-    gainNode.connect(analyser);
+    if (f) {
+	gainNode.connect(f);
+	f.connect(analyser);
+    }
+    else {
+	gainNode.connect(analyser);
+    }
     
     if (starttime) { 
 	source.start(starttime);
@@ -169,6 +175,11 @@ var rnd = function(min,max) {
 
 var semitone = 1.0594645615239402780161318002403;
 var qtone = semitone / 2;
+
+
+var makefilter = function(type, f){
+    return null;
+}
 
     
 var gen = _.debounce(function(okgo) {
@@ -233,32 +244,49 @@ var gen = _.debounce(function(okgo) {
 
 			    makesound(bufferList[3],rnd(4,10)/5,0.3).startx(time(i+1.33333));
 			    makesound(bufferList[1],rnd(4,10)/5,0.3).start(time(i+2));
-			    makesound(bufferList[2],rnd(4,10)/5,0.3).startx(time(i+2.8));
+			    
+			    if (h > 0) {
+				makesound(bufferList[2],2.5, 0.3, time(i+2.75), time(i+2.6), makefilter());
+				makesound(bufferList[2],2.3, 0.3, time(i+2.95), time(i+2.8), makefilter());
+				makesound(bufferList[2],2.1, 0.3,  time(i+3.25), time(i+3.1), makefilter());
+				makesound(bufferList[2],1.9, 0.3,  time(i+3.55), time(i+3.4), makefilter());
+				makesound(bufferList[2],1.7, 0.3,  time(i+3.85), time(i+3.7), makefilter());
+			    }
+			    else {
+				makesound(bufferList[2],2, 0.3, time(i+2.75), time(i+2.6), makefilter());
+			    }
 
-			    makesound(bufferList[1],null,0.6).start(time(i+4));
+			    makesound(bufferList[1],null,0.5).start(time(i+4));
 			
-			    makesound(bufferList[2],rnd(4,10)/5,0.3, time(i+5.8), time(i+5.33333));
-			    makesound(bufferList[3],rnd(4,10)/5,0.3).start(time(i+6));
+			    makesound(bufferList[3],rnd(4,10)/5,0.3, time(i+5.8), time(i+5.33333));
+			    //			    makesound(bufferList[3],rnd(4,10)/5,0.3).start(time(i+6));
+			    makesound(bufferList[2],2, 0.3, time(i+6.15), time(i+6), makefilter());
 			    makesound(bufferList[1],rnd(4,10)/5,0.3, time(i+7.2), time(i+6.8));
 			}
 
 		    }
 
-		    if ([0].indexOf(i) !== -1 && h > -1) {
+		    if ([0].indexOf(i) !== -1 && h > 0) {
 			var voices  =  _.map(voices1, function(x){return x*qtone*Math.pow(2,rnd(1,3))});
 			new Voice(voices[rnd(0,1)]).startx(time(i), 1);
+			new Voice(voices[rnd(6,7)]).startx(time(i), 1);
 
 			new Voice(voices[rnd(0,2)]).startx(time(i+1.333), rnd(0,10)/40);
+			new Voice(voices[rnd(5,7)]).startx(time(i+1.333), rnd(0,10)/40);
 			var voices  =  _.map(voices1, function(x){return x*qtone*Math.pow(2,rnd(1,3))});
 			new Voice(voices[rnd(0,3)]).startx(time(i+2), rnd(0,10)/40);
+			new Voice(voices[rnd(4,6)]).startx(time(i+2), rnd(0,10)/40);
 			new Voice(voices[rnd(0,4)]).startx(time(i+2.8), 0.66);
+			new Voice(voices[rnd(3,6)]).startx(time(i+2.8), 0.66);
 
 			// --
 			var voices  =  _.map(voices1, function(x){return x*qtone*Math.pow(2,rnd(1,3))});
 			 new Voice(voices[rnd(3,4)]).startx(time(i+4), rnd(0,10)/40);
+			 new Voice(voices[rnd(4,5)]).startx(time(i+4), rnd(0,10)/40);
 
 			//new Voice(voices[rnd(4,7)]).startx(time(i+5.333), rnd(0,10)/40);
 			new Voice(voices[rnd(3,7)]).startx(time(i+6), 0.333);
+			new Voice(voices[rnd(1,7)]).startx(time(i+6), 0.333);
 			//new Voice(voices[rnd(3,7)]).startx(time(i+6.8), rnd(0,10)/40);
 		    }
 
