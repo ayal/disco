@@ -217,28 +217,28 @@ var gen = _.debounce(function(okgo) {
 
 		    // snare
 		    if ([4,7,9,12,15].indexOf(i) !== -1 && [0,1].indexOf(j) !== -1) {
-			makesound(bufferList[1], rnd(0.5,1), 0.05, time(i+1), time(i));
+			makesound(bufferList[1], rnd(1,2)/2, 0.05, time(i+1), time(i));
 		    }
 
 		    if ([4,7,9,14].indexOf(i) !== -1 && [2].indexOf(j) !== -1) {
-			makesound(bufferList[1], rnd(0.5,1), 0.05, time(i+1), time(i));
+			makesound(bufferList[1], rnd(1,2)/2, 0.05, time(i+1), time(i));
 		    }
 
 		    if ([1,4,7,9,14].indexOf(i) !== -1 && [3].indexOf(j) !== -1) {
-			makesound(bufferList[1], rnd(0.5,1), 0.05, time(i+1), time(i));
+			makesound(bufferList[1], rnd(1,2)/2, 0.05, time(i+1), time(i));
 		    }
 
 		    // bass
 		    if ([0,2,10,11].indexOf(i) !== -1 && [0,1].indexOf(j) !== -1) {
-			makesound(bufferList[2], rnd(0.5,1), 0.05, time(i+1), time(i));
+			makesound(bufferList[2], rnd(1,2)/2, 0.05, time(i+1), time(i));
 		    }
 
 		    if ([0,2,10].indexOf(i) !== -1 && [2].indexOf(j) !== -1) {
-			makesound(bufferList[2], rnd(0.5,1), 0.05, time(i+1), time(i));
+			makesound(bufferList[2], rnd(1,2)/2, 0.05, time(i+1), time(i));
 		    }
 
 		    if ([2,3,10].indexOf(i) !== -1 && [3].indexOf(j) !== -1) {
-			makesound(bufferList[2], rnd(0.5,1), 0.05, time(i+1), time(i));
+			makesound(bufferList[2], rnd(1,2)/2, 0.05, time(i+1), time(i));
 		    }
 
 
