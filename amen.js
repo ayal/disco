@@ -196,7 +196,7 @@ var gen = _.debounce(function(okgo) {
 	drawit();
 	
 
-	for (var h =  0; h < 3; h++) {
+	for (var h =  0; h < 8; h++) {
 	    for (var j = 0; j < 4; ++j) {
 		var ss,bs = rnd(2,2)/2;
 		for (var i = 0; i < 16; ++i) {
