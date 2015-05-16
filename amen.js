@@ -208,7 +208,7 @@ var gen = _.debounce(function(okgo) {
 
 		    // R
 		    if (i % 2 === 0) {
-			makesound(bufferList[0], rnd(1,3)/2, 0.05, time(i+4), time(i));
+			makesound(bufferList[0], ss, 0.05, time(i+4), time(i));
 		    }
 
 		    // snare
