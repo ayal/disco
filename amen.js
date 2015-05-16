@@ -264,7 +264,7 @@ function finishedLoading(bufferList) {
 bufferLoader = new BufferLoader(
     context,
     [
-     'sounds/R.mp4',
+     'sounds/hh909c.mp3',
      'sounds/S.mp4',
      'sounds/B.mp4',
      'sounds/C.mp4'
