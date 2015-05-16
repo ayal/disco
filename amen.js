@@ -229,7 +229,7 @@ var gen = _.debounce(function(okgo) {
 		    }
 
 		    // bass
-		    if ([0,2,10,11,].indexOf(i) !== -1 && [0,1].indexOf(j) !== -1) {
+		    if ([0,2,10,11].indexOf(i) !== -1 && [0,1].indexOf(j) !== -1) {
 			makesound(bufferList[2], 1, 0.05, time(i+1), time(i));
 		    }
 
