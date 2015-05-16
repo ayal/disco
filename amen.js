@@ -213,15 +213,15 @@ var gen = _.debounce(function(okgo) {
 
 		    // snare
 		    if ([4,7,9,12,15].indexOf(i) !== -1 && [0,1].indexOf(j) !== -1) {
-			makesound(bufferList[1], ss, 0.07, time(i+2-0.5), time(i-0.5));
+			makesound(bufferList[1], ss, 0.07, time(i+2), time(i));
 		    }
 
 		    if ([4,7,9,14].indexOf(i) !== -1 && [2].indexOf(j) !== -1) {
-			makesound(bufferList[1], ss, 0.07, time(i+2-0.5), time(i-0.5));
+			makesound(bufferList[1], ss, 0.07, time(i+2), time(i));
 		    }
 
 		    if ([1,4,7,9,14].indexOf(i) !== -1 && [3].indexOf(j) !== -1) {
-			makesound(bufferList[1], ss, 0.07, time(i+2-0.5), time(i-0.5));
+			makesound(bufferList[1], ss, 0.07, time(i+2), time(i));
 		    }
 
 		    // bass
