@@ -207,7 +207,7 @@ var gen = _.debounce(function(okgo) {
 
 		    // C
 		    if ([10].indexOf(i) !== -1 && [3].indexOf(j) !== -1) {
-			makesound(bufferList[3], 1, 0.06, time(i+2), time(i));
+			makesound(bufferList[3], 1, 0.06, time(i+4), time(i));
 		    }
 
 		    // R
