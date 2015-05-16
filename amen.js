@@ -220,7 +220,7 @@ var gen = _.debounce(function(okgo) {
 			makesound(bufferList[1], 1, 0.05, time(i+1), time(i));
 		    }
 
-		    if ([4,7,14].indexOf(i) !== -1 && [2].indexOf(j) !== -1) {
+		    if ([4,7,9,14].indexOf(i) !== -1 && [2].indexOf(j) !== -1) {
 			makesound(bufferList[1], 1, 0.05, time(i+1), time(i));
 		    }
 
