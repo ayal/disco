@@ -184,7 +184,7 @@ var makefilter = function(type, f){
     
 var gen = _.debounce(function(okgo) {
 	var startTime = context.currentTime + 1.5;
-	var tempo = 120; // BPM (beats per minute)
+	var tempo = 140; // BPM (beats per minute)
 	var bps = 60 / tempo;
 	var eighthNoteTime = (60 / tempo) / 2;
 
